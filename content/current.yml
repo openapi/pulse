@@ -15,7 +15,7 @@
 # The APIs live in their own file, content/apis.yml, because each entry is a
 # record rather than a bare handle.
 
-week: 37
+week: 38
 year: 2026
 
 # The card has a single call to action: the whole image links here.
@@ -68,7 +68,6 @@ exclude:
   - francescobianco
 
 developers:
-  - AlbertoVenanzoniAltravia
   - cipriani1194
   - FrancescoRicchiutiOpenapi
   - GiovanniOpenapi
@@ -77,7 +76,8 @@ developers:
   - MarcoProsperi
   - MicheleOpenApi
   - SimoneOpenapi
+  - AlbertoVenanzoniAltravia
 
 contributors:
-  - Deadpool2000
   - Seraphim200001
+  - Deadpool2000

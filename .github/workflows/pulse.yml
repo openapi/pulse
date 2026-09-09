@@ -20,6 +20,9 @@ on:
     # Daily at 07:00 UTC while the loop is being watched.
     # Weekly, Monday only: "0 7 * * 1"
     - cron: "0 7 * * *"
+    # TEMPORARY — a second daily slot at 15:05 UTC, added only to watch the
+    # first scheduled runs land. Remove this line once the loop is trusted.
+    - cron: "5 15 * * *"
   workflow_dispatch:
 
 permissions:
