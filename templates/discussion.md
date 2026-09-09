@@ -17,13 +17,12 @@ ecosystem, and one invitation to step in.
 
 ### 👩‍💻 Developer of the week
 
-**[@{{developer}}](https://github.com/{{developer}})** — from the people
-building Openapi. See the whole team on the
-[organization page](https://github.com/orgs/openapi/people).
+**@{{developer}}** — from the people building Openapi. See the whole team on
+the [organization page](https://github.com/orgs/openapi/people).
 
 ### 🤝 Contributor of the week
 
-**[@{{contributor}}](https://github.com/{{contributor}})** — from the
+**@{{contributor}}** — from the
 [contributors registry](https://github.com/openapi/contributors). Adding
 yourself to it is a pull request away, and it is what puts you in this
 rotation.
