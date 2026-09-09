@@ -46,6 +46,11 @@ jobs:
         run: pip install --quiet pyyaml
 
       - name: Refresh the queues from their sources
+        env:
+          # The topic queue is read from openapi/discussions, which the GraphQL
+          # API will not serve anonymously. Without this the other three queues
+          # still sync and the topics are left untouched.
+          PULSE_DISCUSSIONS_TOKEN: ${{ secrets.PULSE_DISCUSSIONS_TOKEN }}
         run: python generator/sync.py
 
       - name: Build the card for this edition
