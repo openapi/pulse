@@ -89,6 +89,10 @@ call to action — the Discussions.
 
 The card above is live. This is the prototype currently in `public/`.
 
+It carries four tracks: the **API of the week**, the **Developer of the week**
+and the **Contributor of the week** — both with their GitHub avatar — and the
+**Community discussion** worth joining.
+
 ### How it works
 
 The content lives in exactly one place. Repositories embed a stable URL and
@@ -97,7 +101,8 @@ never need an editorial commit again — the weekly update happens only here.
 ```text
 content/current.yml          ← the only file edited each week
         │
-generator/build.py           ← renders both themes
+generator/rotate.py          ← advances the week, rotates the people
+generator/build.py           ← renders both themes, embeds the avatars
         │
 public/ticker.svg
 public/ticker-dark.svg
@@ -131,47 +136,77 @@ The `<picture>` element gives the card a light and a dark variant so it sits
 naturally in both GitHub themes. The whole image is one link, with one
 destination — the card carries several stories but never competes with itself.
 
-### Updating the card
+### The weekly rotation
 
-Edit `content/current.yml`, regenerate, commit:
-
-```bash
-$EDITOR content/current.yml
-python3 generator/build.py
-git commit -am "pulse: week 38"
-```
-
-`current.yml` holds the week number, the three editorial columns and the CTA:
+`current.yml` holds two ordered pools of GitHub nicknames. The card always
+features the **head** of each list:
 
 ```yaml
 week: 37
 
-cta:
-  text: JOIN THE CONVERSATION
-  url: https://github.com/orgs/openapi/discussions
+developers:
+  - octocat        ← on the card this week
+  - mona
+  - web-flow
+  - dependabot
 
-columns:
-  - label: API OF THE WEEK
-    value: Open-Meteo
-  - label: DEVELOPER OF THE WEEK
-    value: "@foobar"
-  - label: COMMUNITY DISCUSSION
-    value: Do agents still need SDKs?
+contributors:
+  - hubot          ← on the card this week
+  - ghost
+  - actions-user
+  - github
 ```
 
-Column values are clipped at 28 characters so the three tracks never collide.
+Running the rotation moves each head to the tail, so the next name steps
+forward and nobody repeats until the whole pool has had a turn:
+
+```bash
+python3 generator/rotate.py            # bump the week, rotate, regenerate
+python3 generator/rotate.py --dry-run  # preview who is up next
+```
+
+```text
+week 37 → 38
+  developers: @octocat → @mona
+  contributors: @hubot → @ghost
+```
+
+The order stays plain text and hand-editable: to feature someone sooner move
+them to the top, to add someone append them to the bottom. `rotate.py` edits
+the file line by line, so comments and formatting survive. After week 52 it
+rolls over into week 1 of the next year.
+
+To change the other tracks — the API, the discussion, the CTA — edit
+`current.yml` and run the generator on its own:
+
+```bash
+$EDITOR content/current.yml
+python3 generator/build.py
+```
+
+> The nicknames currently in the file are **placeholders**: GitHub mascot, bot
+> and organization accounts, chosen precisely because they do not belong to
+> real people. Replace them with real community handles before going live — the
+> card publishes the face of whoever is listed.
 
 ### Design notes
 
-* **880 × 132**, one line of identity and one line of content — small enough not
-  to steal space from the project, distinctive enough to be recognized across
-  repositories.
+* **880 × 148**, one line of identity and one line of content — small enough
+  not to steal space from the project, distinctive enough to be recognized
+  across repositories.
 * **Editorial, not CI.** No Shields-style key/value pills: a badge says
   `build | passing`, the Pulse Card says *this week in the community*.
-* **No external assets.** System font stack, no web fonts, no scripts — GitHub
-  serves README images through a caching proxy that would drop them.
+* **Avatars are baked in.** GitHub serves README images through a caching proxy
+  that renders them in restricted mode, where an SVG cannot load any external
+  resource. So `build.py` downloads `https://github.com/<nickname>.png` and
+  embeds it as a base64 data URI, clipped to a circle. Downloads are cached in
+  `generator/.cache/`; a nickname that cannot be fetched degrades to an
+  initial-letter monogram instead of breaking the build.
+* **No external assets at all** — system font stack, no web fonts, no scripts.
 * The heartbeat mark and the trace along the bottom edge are CSS animations,
   disabled under `prefers-reduced-motion`.
+* Values are clipped with an ellipsis at a per-column character budget, so no
+  track can ever run into the next one.
 
 ### Still to refine
 
@@ -180,7 +215,7 @@ Column values are clipped at 28 characters so the three tracks never collide.
 * Hosting: `raw.githubusercontent.com` works today; GitHub Pages
   (`openapi.github.io/pulse/ticker.svg`) or a dedicated endpoint would give
   proper control over cache headers.
-* A `publish-pulse.yml` workflow to regenerate and commit the SVGs weekly.
+* A `publish-pulse.yml` workflow to run `rotate.py` and commit the SVGs weekly.
 
 See [CARD.md](CARD.md) for the full rationale behind the component.
 

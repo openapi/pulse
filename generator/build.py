@@ -7,30 +7,53 @@ public/ticker-dark.svg (dark).
 
     python3 generator/build.py
 
-No third-party dependencies required: PyYAML is used when available,
-otherwise a minimal parser handles the small subset of YAML used by
-content/current.yml.
+Avatars are downloaded from https://github.com/<nickname>.png and embedded in
+the SVG as data URIs. This is not an optimisation: GitHub serves README images
+through a caching proxy that renders them in restricted mode, where an SVG
+cannot pull in any external resource. Anything the card shows has to be inside
+the file. Downloads are cached in generator/.cache/ between runs, and a
+nickname that cannot be fetched falls back to an initial-letter monogram, so
+the build never breaks on a typo or an offline machine.
+
+PyYAML is used when available; otherwise a minimal parser handles the small
+subset of YAML that content/current.yml uses.
 """
 
+import base64
+import sys
 from pathlib import Path
+from urllib.error import URLError, HTTPError
+from urllib.request import Request, urlopen
 from xml.sax.saxutils import escape
 
 ROOT = Path(__file__).resolve().parent.parent
 CONTENT = ROOT / "content" / "current.yml"
 PUBLIC = ROOT / "public"
+CACHE = Path(__file__).resolve().parent / ".cache"
 
 WIDTH = 880
-HEIGHT = 132
+HEIGHT = 148
 
-# Column geometry: x origin of each of the three editorial columns and the
-# x position of the hairline separator that follows it.
-COLUMNS_X = (28, 328, 610)
-SEPARATORS_X = (306, 588)
+# Four editorial tracks: x origin, usable width, and the x of the hairline
+# separator that closes each one. Widths are sized to the longest label each
+# column carries, so nothing has to be truncated in the common case.
+TRACKS = (
+    {"x": 24, "width": 180, "sep": 204},
+    {"x": 222, "width": 172, "sep": 394},
+    {"x": 412, "width": 182, "sep": 594},
+    {"x": 612, "width": 244, "sep": None},
+)
 
-# Max characters per column value before ellipsis. Values are rendered in a
-# 15px semibold face; these limits keep every column inside its own track.
-VALUE_MAX_CHARS = 28
-LABEL_MAX_CHARS = 26
+LABEL_Y = 76
+VALUE_Y = 103
+AVATAR_SIZE = 26
+AVATAR_CY = 97
+
+# Character budgets per field, at the sizes below. Values longer than this are
+# clipped with an ellipsis rather than allowed to run into the next column.
+MAX_API = 22
+MAX_HANDLE = 16
+MAX_DISCUSSION = 30
 
 THEMES = {
     "light": {
@@ -63,6 +86,10 @@ FONT = ("-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,"
         "Arial,'Liberation Sans',sans-serif")
 
 
+# --------------------------------------------------------------------------
+# content
+# --------------------------------------------------------------------------
+
 def load_content():
     """Parse content/current.yml into a plain dict."""
     raw = CONTENT.read_text(encoding="utf-8")
@@ -74,10 +101,9 @@ def load_content():
 
 
 def _mini_yaml(raw):
-    """Fallback parser: handles the flat maps + one list of maps we use."""
+    """Fallback parser: nested maps plus lists of plain scalars."""
     data = {}
     stack = [(-1, data)]
-    current_item = None
     for line in raw.splitlines():
         if not line.strip() or line.lstrip().startswith("#"):
             continue
@@ -85,24 +111,18 @@ def _mini_yaml(raw):
         body = line.strip()
 
         if body.startswith("- "):
-            parent = next(c for i, c in reversed(stack) if i < indent)
-            current_item = {}
-            parent.append(current_item) if isinstance(parent, list) else None
-            body = body[2:].strip()
-            key, _, value = body.partition(":")
-            current_item[key.strip()] = _scalar(value.strip())
+            container = next(c for i, c in reversed(stack) if i < indent)
+            container.append(_scalar(body[2:]))
             continue
 
         while stack and stack[-1][0] >= indent:
             stack.pop()
         container = stack[-1][1]
-        if isinstance(container, list):
-            container = current_item
 
         key, _, value = body.partition(":")
         key, value = key.strip(), value.strip()
         if value == "":
-            child = [] if key == "columns" else {}
+            child = [] if key in ("developers", "contributors") else {}
             container[key] = child
             stack.append((indent, child))
         else:
@@ -119,33 +139,108 @@ def _scalar(value):
     return value
 
 
+# --------------------------------------------------------------------------
+# avatars
+# --------------------------------------------------------------------------
+
+def avatar_data_uri(nickname):
+    """Return a base64 PNG data URI for a GitHub user, or None if unavailable."""
+    if not nickname:
+        return None
+    CACHE.mkdir(exist_ok=True)
+    cached = CACHE / f"{nickname}.png"
+
+    if not cached.exists():
+        url = f"https://github.com/{nickname}.png?size=96"
+        try:
+            request = Request(url, headers={"User-Agent": "openapi-pulse-card"})
+            with urlopen(request, timeout=10) as response:
+                payload = response.read()
+        except (URLError, HTTPError, OSError) as error:
+            print(f"  ! avatar for @{nickname} unavailable ({error}); "
+                  f"using monogram", file=sys.stderr)
+            return None
+        cached.write_bytes(payload)
+
+    encoded = base64.b64encode(cached.read_bytes()).decode("ascii")
+    return f"data:image/png;base64,{encoded}"
+
+
+# --------------------------------------------------------------------------
+# svg helpers
+# --------------------------------------------------------------------------
+
 def clip(text, limit):
     text = str(text)
     return text if len(text) <= limit else text[: limit - 1].rstrip() + "…"
 
 
-def text_el(x, y, content, fill, size, weight=400, spacing=0, anchor="start", opacity=None):
-    attrs = [
-        f'x="{x}"', f'y="{y}"',
-        f'fill="{fill}"',
-        f'font-size="{size}"',
-        f'font-weight="{weight}"',
-    ]
+def text_el(x, y, content, fill, size, weight=400, spacing=0, anchor="start"):
+    attrs = [f'x="{x}"', f'y="{y}"', f'fill="{fill}"',
+             f'font-size="{size}"', f'font-weight="{weight}"']
     if spacing:
         attrs.append(f'letter-spacing="{spacing}"')
     if anchor != "start":
         attrs.append(f'text-anchor="{anchor}"')
-    if opacity is not None:
-        attrs.append(f'opacity="{opacity}"')
     return f'<text {" ".join(attrs)}>{escape(str(content))}</text>'
 
 
-def build(theme_name, data):
+def label_el(track, text, theme):
+    return text_el(track["x"], LABEL_Y, clip(text, 26).upper(),
+                   theme["muted"], 9, 700, spacing=1.2)
+
+
+def person_el(track, nickname, avatar, theme, index):
+    """Avatar disc plus @handle, laid out from the track's x origin."""
+    x = track["x"]
+    radius = AVATAR_SIZE / 2
+    top = AVATAR_CY - radius
+    parts = [
+        f'<clipPath id="avatar-{index}">'
+        f'<circle cx="{x + radius}" cy="{AVATAR_CY}" r="{radius}"/>'
+        f'</clipPath>'
+    ]
+
+    if avatar:
+        parts.append(
+            f'<image x="{x}" y="{top}" width="{AVATAR_SIZE}" height="{AVATAR_SIZE}" '
+            f'clip-path="url(#avatar-{index})" preserveAspectRatio="xMidYMid slice" '
+            f'href="{avatar}" xlink:href="{avatar}"/>'
+        )
+    else:
+        # Monogram fallback: keeps the layout intact when the avatar is missing.
+        parts.append(
+            f'<circle cx="{x + radius}" cy="{AVATAR_CY}" r="{radius}" '
+            f'fill="{theme["faint"]}"/>'
+        )
+        parts.append(
+            text_el(x + radius, AVATAR_CY + 4.5, nickname[:1].upper(),
+                    theme["muted"], 12, 700, anchor="middle")
+        )
+
+    # Hairline ring, so light avatars keep an edge against the card.
+    parts.append(
+        f'<circle cx="{x + radius}" cy="{AVATAR_CY}" r="{radius - 0.5}" '
+        f'fill="none" stroke="{theme["border"]}"/>'
+    )
+    parts.append(
+        text_el(x + AVATAR_SIZE + 10, VALUE_Y, f"@{clip(nickname, MAX_HANDLE)}",
+                theme["text"], 14, 600)
+    )
+    return parts
+
+
+# --------------------------------------------------------------------------
+# card
+# --------------------------------------------------------------------------
+
+def build(theme_name, data, avatars):
     t = THEMES[theme_name]
     week = data.get("week", "")
-    columns = data.get("columns", [])[:3]
     cta = data.get("cta", {}) or {}
     cta_text = clip(cta.get("text", "JOIN THE CONVERSATION"), 30)
+    developer = featured(data, "developers")
+    contributor = featured(data, "contributors")
 
     parts = []
 
@@ -193,30 +288,41 @@ def build(theme_name, data):
         f'<rect x="{pill_x}" y="12" width="{pill_w}" height="24" rx="12" fill="{t["cta_bg"]}"/>'
     )
     parts.append(
-        text_el(pill_x + pill_w / 2, 28, f"{cta_text}  →", t["cta_text"], 11, 700, spacing=1.2, anchor="middle")
+        text_el(pill_x + pill_w / 2, 28, f"{cta_text}  →", t["cta_text"], 11, 700,
+                spacing=1.2, anchor="middle")
     )
 
-    # --- editorial columns ---------------------------------------------
-    for x, column in zip(COLUMNS_X, columns):
-        parts.append(
-            text_el(x, 74, clip(column.get("label", ""), LABEL_MAX_CHARS).upper(),
-                    t["muted"], 9.5, 700, spacing=1.4)
-        )
-        parts.append(
-            text_el(x, 97, clip(column.get("value", ""), VALUE_MAX_CHARS),
-                    t["text"], 15, 600)
-        )
+    # --- editorial tracks ----------------------------------------------
+    api = (data.get("api_of_week", {}) or {}).get("name", "")
+    discussion = (data.get("discussion", {}) or {}).get("title", "")
 
-    for x in SEPARATORS_X:
-        parts.append(f'<line x1="{x}" y1="64" x2="{x}" y2="102" stroke="{t["faint"]}"/>')
+    parts.append(label_el(TRACKS[0], "API of the week", t))
+    parts.append(text_el(TRACKS[0]["x"], VALUE_Y, clip(api, MAX_API), t["text"], 14, 600))
+
+    parts.append(label_el(TRACKS[1], "Developer of the week", t))
+    parts.extend(person_el(TRACKS[1], developer, avatars.get(developer), t, 0))
+
+    parts.append(label_el(TRACKS[2], "Contributor of the week", t))
+    parts.extend(person_el(TRACKS[2], contributor, avatars.get(contributor), t, 1))
+
+    parts.append(label_el(TRACKS[3], "Community discussion", t))
+    parts.append(text_el(TRACKS[3]["x"], VALUE_Y, clip(discussion, MAX_DISCUSSION),
+                         t["text"], 14, 600))
+
+    for track in TRACKS:
+        if track["sep"]:
+            parts.append(
+                f'<line x1="{track["sep"]}" y1="66" x2="{track["sep"]}" y2="110" '
+                f'stroke="{t["faint"]}"/>'
+            )
 
     # --- baseline ECG --------------------------------------------------
-    # A flat trace with one beat, sliding slowly left to right along the
-    # bottom edge: the card's "still alive" signal.
+    # A flat trace with one beat, sliding slowly left to right along the bottom
+    # edge: the card's "still alive" signal.
     beat = "M0 0h96l6-10 5 20 6-10h74"
     parts.append(
         f'<g clip-path="url(#card)">'
-        f'<g transform="translate(0 111)">'
+        f'<g transform="translate(0 127)">'
         f'<line x1="24" y1="0" x2="{WIDTH - 24}" y2="0" stroke="{t["border"]}" stroke-width="1.5"/>'
         f'<g stroke="{t["accent"]}" stroke-width="2" fill="none" opacity="0.75" '
         f'stroke-linecap="round" stroke-linejoin="round">'
@@ -228,17 +334,17 @@ def build(theme_name, data):
 
     body = "\n  ".join(parts)
     return (
-        f'<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" height="{HEIGHT}" '
-        f'viewBox="0 0 {WIDTH} {HEIGHT}" role="img" '
-        f'aria-label="OpenAPI Pulse — week {week}">\n'
+        f'<svg xmlns="http://www.w3.org/2000/svg" '
+        f'xmlns:xlink="http://www.w3.org/1999/xlink" '
+        f'width="{WIDTH}" height="{HEIGHT}" viewBox="0 0 {WIDTH} {HEIGHT}" '
+        f'role="img" aria-label="OpenAPI Pulse — week {week}">\n'
         f'  <title>OpenAPI Pulse — week {week}</title>\n'
         f'  <style>\n'
         f'    text {{ font-family: {FONT}; }}\n'
         f'    .dot, .ring {{ transform-box: fill-box; transform-origin: center; }}\n'
         f'    .dot {{ animation: beat 1.6s ease-in-out infinite; }}\n'
         f'    .ring {{ animation: halo 1.6s ease-out infinite; }}\n'
-        f'    .trace {{ transform: translateX(24px); '
-        f'animation: trace 9s linear infinite; }}\n'
+        f'    .trace {{ transform: translateX(24px); animation: trace 9s linear infinite; }}\n'
         f'    @keyframes beat {{ 0%, 100% {{ opacity: 1; transform: scale(1); }}'
         f' 45% {{ opacity: 0.55; transform: scale(0.7); }} }}\n'
         f'    @keyframes halo {{ 0% {{ opacity: 0.7; transform: scale(1); }}'
@@ -255,12 +361,29 @@ def build(theme_name, data):
     )
 
 
+def featured(data, key):
+    """The person on stage this week: always the head of the rotation list."""
+    people = data.get(key) or []
+    return people[0] if people else ""
+
+
 def main():
     data = load_content()
+    developer = featured(data, "developers")
+    contributor = featured(data, "contributors")
+
+    avatars = {}
+    for nickname in (developer, contributor):
+        if nickname and nickname not in avatars:
+            avatars[nickname] = avatar_data_uri(nickname)
+
+    print(f"week {data.get('week')}: @{developer} (developer), "
+          f"@{contributor} (contributor)")
+
     PUBLIC.mkdir(exist_ok=True)
     for name, theme in THEMES.items():
         out = PUBLIC / theme["file"]
-        out.write_text(build(name, data), encoding="utf-8")
+        out.write_text(build(name, data, avatars), encoding="utf-8")
         print(f"wrote {out.relative_to(ROOT)}")
 
 

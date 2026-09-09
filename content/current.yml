@@ -1,6 +1,8 @@
 # OpenAPI Pulse — contenuto editoriale della settimana.
-# Questo è l'UNICO file da aggiornare ogni settimana.
-# Il generatore (generator/build.py) rigenera public/ticker.svg e public/ticker-dark.svg.
+# Questo è l'UNICO file da aggiornare. Il generatore rigenera i due SVG:
+#
+#   python3 generator/rotate.py   # avanza la settimana e ruota le liste
+#   python3 generator/build.py    # rigenera public/ticker.svg e ticker-dark.svg
 
 week: 37
 year: 2026
@@ -10,12 +12,36 @@ cta:
   text: JOIN THE CONVERSATION
   url: https://github.com/orgs/openapi/discussions
 
-# Le tre colonne editoriali. Tenere i valori corti (max ~26 caratteri)
-# per non far uscire il testo dalla colonna.
-columns:
-  - label: API OF THE WEEK
-    value: Open-Meteo
-  - label: DEVELOPER OF THE WEEK
-    value: "@foobar"
-  - label: COMMUNITY DISCUSSION
-    value: Do agents still need SDKs?
+api_of_week:
+  name: Open-Meteo
+  url: https://open-meteo.com
+
+discussion:
+  title: Do agents still need SDKs?
+  url: https://github.com/orgs/openapi/discussions
+
+# --- Rotazione settimanale --------------------------------------------------
+# La card mostra sempre il PRIMO nickname di ogni lista, con l'avatar preso da
+# https://github.com/<nickname>.png e incorporato nell'SVG.
+#
+# `rotate.py` sposta il primo elemento in fondo alla lista, quindi ogni
+# settimana entra in scena il successivo e nessuno si ripete finché non è
+# passato tutto il giro. Per far uscire prima qualcuno, spostalo a mano in
+# testa. Per aggiungere una persona, mettila in fondo.
+#
+# ATTENZIONE: i nickname qui sotto sono SEGNAPOSTO — account mascotte, bot e
+# organizzazioni di GitHub, scelti apposta perché non appartengono a persone
+# reali. Vanno sostituiti con gli handle veri della community prima di andare
+# in produzione: la card pubblica il volto di chi elenchi qui.
+
+developers:
+  - octocat
+  - mona
+  - web-flow
+  - dependabot
+
+contributors:
+  - hubot
+  - ghost
+  - actions-user
+  - github
