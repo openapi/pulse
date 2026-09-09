@@ -157,7 +157,7 @@ Double down only on what demonstrates traction.
 
 bring traffic in from here
 The pools I would go after first
-Micro-community	Why it is interesting	OpenAPI strategy
+Micro-community	Why it is interesting	Openapi strategy
 APIs.guru / OpenAPI Directory	People who publish/catalogue APIs	API of the Week, Certified API
 TypeSpec OpenAPI3	API design, schemas, generators	cross-project technical discussions
 Hoppscotch Discussions	API developers/tooling	API tooling, polls, workflows

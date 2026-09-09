@@ -1,4 +1,4 @@
-# OpenAPI Pulse — the API rotation queue.
+# Openapi Pulse — the API rotation queue.
 #
 # The API at the TOP of this list is the one going out in the next edition.
 # To choose it, move its entry to the top; publishing moves it to the bottom,

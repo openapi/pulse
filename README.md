@@ -9,7 +9,7 @@
               srcset="https://raw.githubusercontent.com/openapi/pulse/main/public/ticker-dark.svg">
       <source media="(prefers-color-scheme: light)"
               srcset="https://raw.githubusercontent.com/openapi/pulse/main/public/ticker.svg">
-      <img alt="OpenAPI Pulse — this week in the OpenAPI community"
+      <img alt="Openapi Pulse — this week in the Openapi community"
            src="https://raw.githubusercontent.com/openapi/pulse/main/public/ticker.svg">
     </picture>
   </a>
@@ -133,7 +133,7 @@ Place this right after the title and the main badges:
               srcset="https://raw.githubusercontent.com/openapi/pulse/main/public/ticker-dark.svg">
       <source media="(prefers-color-scheme: light)"
               srcset="https://raw.githubusercontent.com/openapi/pulse/main/public/ticker.svg">
-      <img alt="OpenAPI Pulse"
+      <img alt="Openapi Pulse"
            src="https://raw.githubusercontent.com/openapi/pulse/main/public/ticker.svg">
     </picture>
   </a>
@@ -245,7 +245,7 @@ access to the discussions repository is required.
   initial-letter monogram instead of breaking the build.
 * **No external assets at all** — system font stack, no web fonts, no scripts.
 * The heartbeat mark and the trace along the bottom edge are CSS animations,
-  disabled under `prefers-reduced-motion`. They carry the OpenAPI purple —
+  disabled under `prefers-reduced-motion`. They carry the Openapi purple —
   `#563e7d` on light, lightened to `#9c7ecc` on dark, where the brand value
   itself would all but disappear against `#0d1117`.
 * Values are **fitted** to their track: the type shrinks from 14px down to 10px

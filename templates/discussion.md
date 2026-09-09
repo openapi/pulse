@@ -3,12 +3,12 @@
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="{{card_dark}}">
       <source media="(prefers-color-scheme: light)" srcset="{{card_light}}">
-      <img alt="OpenAPI Pulse — week {{week}}" src="{{card_light}}">
+      <img alt="Openapi Pulse — week {{week}}" src="{{card_light}}">
     </picture>
   </a>
 </p>
 
-Every edition of the Pulse is one short pass over what moved in the OpenAPI
+Every edition of the Pulse is one short pass over what moved in the Openapi
 ecosystem, and one invitation to step in.
 
 ### 🔌 API of the week
@@ -18,7 +18,7 @@ ecosystem, and one invitation to step in.
 ### 👩‍💻 Developer of the week
 
 **[@{{developer}}](https://github.com/{{developer}})** — from the people
-building OpenAPI. See the whole team on the
+building Openapi. See the whole team on the
 [organization page](https://github.com/orgs/openapi/people).
 
 ### 🤝 Contributor of the week

@@ -209,11 +209,11 @@ def index_body(data, edition_url, revision):
         f'srcset="{RAW}/{revision}/public/ticker-dark.svg">\n'
         f'      <source media="(prefers-color-scheme: light)" '
         f'srcset="{RAW}/{revision}/public/ticker.svg">\n'
-        f'      <img alt="OpenAPI Pulse" src="{RAW}/{revision}/public/ticker.svg">\n'
+        f'      <img alt="Openapi Pulse" src="{RAW}/{revision}/public/ticker.svg">\n'
         f"    </picture>\n"
         f"  </a>\n"
         f"</p>\n\n"
-        f"The OpenAPI ecosystem publishes an edition of the **Pulse** on a "
+        f"The Openapi ecosystem publishes an edition of the **Pulse** on a "
         f"regular beat: the API worth a look, the people building and "
         f"contributing, and the discussion worth joining.\n\n"
         f"### 👉 Latest edition: [{title_for(data)}]({edition_url})\n\n"
@@ -227,7 +227,7 @@ def index_body(data, edition_url, revision):
 
 
 def title_for(data):
-    return f"OpenAPI Pulse — Edition {data.get('week', '')}"
+    return f"Openapi Pulse — Edition {data.get('week', '')}"
 
 
 # --------------------------------------------------------------------------
@@ -280,7 +280,7 @@ def update_index(data, settings, owner, name, edition_url, revision):
             "\nno pinned index configured. GitHub has no API for pinning a "
             "discussion, so to keep one always-visible entry point:\n"
             f"  1. open a discussion in {owner}/{name} (any title, e.g. "
-            '"OpenAPI Pulse")\n'
+            '"Openapi Pulse")\n'
             "  2. pin it by hand — once, forever\n"
             "  3. put its number in content/current.yml under discussions.index\n"
             "From then on this script rewrites its body at every edition."

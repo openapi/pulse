@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-OpenAPI Pulse Card generator.
+Openapi Pulse Card generator.
 
 Reads content/current.yml and writes public/ticker.svg (light) and
 public/ticker-dark.svg (dark).
@@ -388,8 +388,8 @@ def build(theme_name, data, avatars):
         f'<svg xmlns="http://www.w3.org/2000/svg" '
         f'xmlns:xlink="http://www.w3.org/1999/xlink" '
         f'width="{WIDTH}" height="{HEIGHT}" viewBox="0 0 {WIDTH} {HEIGHT}" '
-        f'role="img" aria-label="OpenAPI Pulse — week {week}">\n'
-        f'  <title>OpenAPI Pulse — week {week}</title>\n'
+        f'role="img" aria-label="Openapi Pulse — week {week}">\n'
+        f'  <title>Openapi Pulse — week {week}</title>\n'
         f'  <style>\n'
         f'    text {{ font-family: {FONT}; }}\n'
         f'    .dot, .ring {{ transform-box: fill-box; transform-origin: center; }}\n'

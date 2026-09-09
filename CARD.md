@@ -1,11 +1,11 @@
-# OpenAPI Pulse Card
+# Openapi Pulse Card
 
 The idea is to introduce a small, shared editorial card into every repository
 in the `@openapi` organization, placed near the top of the README, so that
 traffic flows from the individual repositories towards the community and the
 Discussions.
 
-The card should work as a kind of **weekly news ticker for the OpenAPI
+The card should work as a kind of **weekly news ticker for the Openapi
 ecosystem**, showing a few selected editorial items curated in `pulse`, such as:
 
 * API of the Week
@@ -29,7 +29,7 @@ reference to the Pulse Card once and only once.
 For example:
 
 ```markdown
-[![OpenAPI Pulse](https://openapi.github.io/pulse/ticker.svg)](https://github.com/openapi/discussions)
+[![Openapi Pulse](https://openapi.github.io/pulse/ticker.svg)](https://github.com/openapi/discussions)
 ```
 
 From that point on, every weekly change happens exclusively inside
@@ -72,14 +72,14 @@ Roughly:
 Indicative dimensions: around 800–900 px wide and 80–120 px tall.
 
 Small enough not to steal space from the project, but recognizable enough to
-become a recurring element of the OpenAPI identity.
+become a recurring element of the Openapi identity.
 
 ## Placement in the README
 
 The ideal position is right after the title/logo and the main badges:
 
 ```markdown
-# OpenAPI Python Client
+# Openapi Python Client
 
 [build badges]
 
@@ -184,7 +184,7 @@ and embed them in the README through `<picture>`:
         media="(prefers-color-scheme: light)"
         srcset="https://openapi.github.io/pulse/ticker.svg">
       <img
-        alt="OpenAPI Pulse"
+        alt="Openapi Pulse"
         src="https://openapi.github.io/pulse/ticker.svg">
     </picture>
   </a>
@@ -262,7 +262,7 @@ version | 3.2
 The Pulse Card instead has to communicate:
 
 ```text
-this week in the OpenAPI community...
+this week in the Openapi community...
 ```
 
 So it needs a visual identity of its own.
@@ -347,18 +347,18 @@ Publish
 The component can have a recognizable name and become part of the branding of
 the organization:
 
-**OpenAPI Pulse Card**
+**Openapi Pulse Card**
 
 or:
 
-**OpenAPI Pulse Ticker**
+**Openapi Pulse Ticker**
 
 `Pulse` remains the editorial engine, while the Pulse Card is the component
 distributed across the READMEs.
 
 ## Final goal
 
-Every OpenAPI repository should implicitly communicate two things:
+Every Openapi repository should implicitly communicate two things:
 
 ```text
 this library is maintained
