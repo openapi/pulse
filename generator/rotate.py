@@ -5,7 +5,7 @@ Advance the queues by one edition.
     python3 generator/rotate.py [--dry-run]
 
 Bumps `week` in content/current.yml and moves the top entry of every queue —
-developers, contributors, apis — to the bottom, so the next one comes up and
+developers, contributors, apis, topics — to the bottom, so the next one comes up and
 nobody repeats until the whole queue has had a turn.
 
 Run this *after* publishing, not before. The top of each queue is what goes out
@@ -30,6 +30,7 @@ from pools import item_key, read_block, replace_block  # noqa: E402
 ROOT = Path(__file__).resolve().parent.parent
 CURRENT = ROOT / "content" / "current.yml"
 APIS = ROOT / "content" / "apis.yml"
+TOPICS = ROOT / "content" / "topics.yml"
 LAST_WEEK_OF_YEAR = 52
 
 
@@ -74,12 +75,14 @@ def main():
 
     current_lines = CURRENT.read_text(encoding="utf-8").splitlines()
     api_lines = APIS.read_text(encoding="utf-8").splitlines()
+    topic_lines = TOPICS.read_text(encoding="utf-8").splitlines()
 
     old_week, new_week = bump_week(current_lines)
     print(f"edition {old_week} → {new_week}")
     rotate(current_lines, "developers")
     rotate(current_lines, "contributors")
     rotate(api_lines, "apis", field="slug")
+    rotate(topic_lines, "topics", field="short")
 
     if dry_run:
         print("\n--dry-run: nothing written")
@@ -87,7 +90,8 @@ def main():
 
     CURRENT.write_text("\n".join(current_lines) + "\n", encoding="utf-8")
     APIS.write_text("\n".join(api_lines) + "\n", encoding="utf-8")
-    print("\nupdated content/current.yml and content/apis.yml — "
+    TOPICS.write_text("\n".join(topic_lines) + "\n", encoding="utf-8")
+    print("\nupdated the queues in content/ — "
           "run generator/build.py at the start of the next edition")
 
 

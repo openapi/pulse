@@ -34,7 +34,7 @@ from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build import featured, featured_api, load_content  # noqa: E402
+from build import featured, featured_api, featured_topic, load_content  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 TEMPLATE = ROOT / "templates" / "discussion.md"
@@ -173,7 +173,7 @@ def render(data, revision):
     developer = featured(data, "developers")
     contributor = featured(data, "contributors")
     api = featured_api()
-    topic = data.get("discussion", {}) or {}
+    topic = featured_topic()
     cta = data.get("cta", {}) or {}
 
     values = {

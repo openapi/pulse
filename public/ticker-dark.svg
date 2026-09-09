@@ -39,7 +39,7 @@
   <circle cx="434.0" cy="97" r="12.5" fill="none" stroke="#2c3440"/>
   <text x="457" y="103" fill="#e6edf3" font-size="14" font-weight="600">@Seraphim200001</text>
   <text x="642" y="76" fill="#9198a1" font-size="9" font-weight="700" letter-spacing="1.2">COMMUNITY DISCUSSION</text>
-  <text x="642" y="103" fill="#e6edf3" font-size="14" font-weight="600">Do agents still need SDKs?</text>
+  <text x="642" y="103" fill="#e6edf3" font-size="14" font-weight="600">What makes you trust an API?</text>
   <line x1="177" y1="66" x2="177" y2="110" stroke="#212a35"/>
   <line x1="408" y1="66" x2="408" y2="110" stroke="#212a35"/>
   <line x1="629" y1="66" x2="629" y2="110" stroke="#212a35"/>

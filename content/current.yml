@@ -12,8 +12,9 @@
 #   python3 generator/publish.py   # post the edition to Discussions
 #   python3 generator/rotate.py    # advance the queues for the next one
 #
-# The APIs live in their own file, content/apis.yml, because each entry is a
-# record rather than a bare handle.
+# The APIs and the discussion topics live in their own files, content/apis.yml
+# and content/topics.yml, because each of their entries is a record rather than
+# a bare handle.
 
 week: 38
 year: 2026
@@ -39,11 +40,6 @@ discussions:
   repo: openapi/discussions
   category: Openapi Pulse
   index: 3
-
-# The discussion the card puts in the spotlight.
-discussion:
-  title: Do agents still need SDKs?
-  url: https://github.com/orgs/openapi/discussions
 
 # --- The people ---------------------------------------------------------------
 # The card shows the handle at the top of each queue, with the avatar pulled

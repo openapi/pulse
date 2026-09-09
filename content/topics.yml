@@ -1,0 +1,136 @@
+# Openapi Pulse — the discussion rotation queue.
+#
+# The topic at the TOP of this list is the one the card spotlights in the next
+# edition. To choose it, move its entry to the top; publishing moves it to the
+# bottom, so the queue keeps turning on its own once you stop curating it.
+#
+# `sync.py` refreshes this list from the open discussions in
+#   https://github.com/openapi/discussions
+# skipping the Openapi Pulse category, which holds the editions themselves
+# rather than things to talk about. It preserves the order you set.
+#
+# `short` is what goes on the card, which has room for roughly 35 characters
+# before the type starts shrinking. `title` is the real discussion title, used
+# in the published post. A topic without a `short` falls back to its title.
+
+topics:
+  - number: 4
+    short: What makes you trust an API?
+    title: What makes you trust an API you have never used before?
+    url: https://github.com/orgs/openapi/discussions/4
+  - number: 5
+    short: Docs pages worth copying
+    title: The API docs page you wish every provider would copy
+    url: https://github.com/orgs/openapi/discussions/5
+  - number: 6
+    short: Is this API worth integrating?
+    title: How do you decide an API is worth an integration?
+    url: https://github.com/orgs/openapi/discussions/6
+  - number: 7
+    short: curl, Postman, Bruno, or what?
+    title: curl, Postman, Bruno, Hoppscotch — what is actually open on your second monitor?
+    url: https://github.com/orgs/openapi/discussions/7
+  - number: 8
+    short: Your first request to a new API
+    title: What is the first request you send to any new API?
+    url: https://github.com/orgs/openapi/discussions/8
+  - number: 9
+    short: Rate limits: fair or hostile?
+    title: Rate limits: fair, hostile, or just badly documented?
+    url: https://github.com/orgs/openapi/discussions/9
+  - number: 10
+    short: Are API sandboxes worth it?
+    title: Sandbox environments: genuinely useful, or a second thing to keep in sync?
+    url: https://github.com/orgs/openapi/discussions/10
+  - number: 11
+    short: When is a typed client overkill?
+    title: When does a REST API deserve a typed client, and when is it overkill?
+    url: https://github.com/orgs/openapi/discussions/11
+  - number: 12
+    short: Where do you find APIs now?
+    title: Where do you actually find an API these days?
+    url: https://github.com/orgs/openapi/discussions/12
+  - number: 13
+    short: Versioning: URL or header?
+    title: Versioning: in the URL, in a header, or never break anything?
+    url: https://github.com/orgs/openapi/discussions/13
+  - number: 14
+    short: Which integration is missing?
+    title: Which integration should exist and does not?
+    url: https://github.com/orgs/openapi/discussions/14
+  - number: 15
+    short: One small CLI: what should it do?
+    title: If one small CLI tool shipped next month, what should it do?
+    url: https://github.com/orgs/openapi/discussions/15
+  - number: 16
+    short: The tool nobody has built
+    title: What belongs in an API developer toolbox that nobody has built?
+    url: https://github.com/orgs/openapi/discussions/16
+  - number: 17
+    short: What makes you send a PR?
+    title: What would make you actually contribute to an SDK you use?
+    url: https://github.com/orgs/openapi/discussions/17
+  - number: 18
+    short: A cookbook: which 20 recipes?
+    title: A cookbook of 20-line recipes: which 20 recipes?
+    url: https://github.com/orgs/openapi/discussions/18
+  - number: 19
+    short: What should Certified API mean?
+    title: What should a 'Certified API' badge actually certify?
+    url: https://github.com/orgs/openapi/discussions/19
+  - number: 20
+    short: What makes an API health score?
+    title: If an API had a health score, what would go into it?
+    url: https://github.com/orgs/openapi/discussions/20
+  - number: 21
+    short: Spec to code: what is missing?
+    title: What is still missing between an OpenAPI specification and working code?
+    url: https://github.com/orgs/openapi/discussions/21
+  - number: 22
+    short: Do agents still need SDKs?
+    title: Do AI agents still need SDKs, or is a good specification enough?
+    url: https://github.com/orgs/openapi/discussions/22
+  - number: 23
+    short: How many MCP servers do you keep?
+    title: How many MCP servers do you actually keep enabled?
+    url: https://github.com/orgs/openapi/discussions/23
+  - number: 24
+    short: Tool call fails: what next?
+    title: Your agent's API call fails. What should happen next?
+    url: https://github.com/orgs/openapi/discussions/24
+  - number: 25
+    short: How do you eval an API agent?
+    title: How do you evaluate an agent that talks to real APIs?
+    url: https://github.com/orgs/openapi/discussions/25
+  - number: 26
+    short: NL to API call: product or demo?
+    title: Is 'natural language to API call' a product, or a demo?
+    url: https://github.com/orgs/openapi/discussions/26
+  - number: 27
+    short: What makes a good MCP tool doc?
+    title: What does a genuinely good MCP tool description look like?
+    url: https://github.com/orgs/openapi/discussions/27
+  - number: 28
+    short: Invented field or refused call?
+    title: Worse: an agent that invents a field, or one that refuses to call?
+    url: https://github.com/orgs/openapi/discussions/28
+  - number: 29
+    short: Tool call broke: what do you check?
+    title: What is the first thing you check when a tool call goes wrong?
+    url: https://github.com/orgs/openapi/discussions/29
+  - number: 30
+    short: The smallest thing you built
+    title: Show us the smallest useful thing you built on an API
+    url: https://github.com/orgs/openapi/discussions/30
+  - number: 31
+    short: Your daily API one-liner
+    title: Show your terminal: the one-liner you run against an API every day
+    url: https://github.com/orgs/openapi/discussions/31
+  - number: 32
+    short: Show us your MCP server
+    title: Show us your MCP server — even if it does exactly one thing
+    url: https://github.com/orgs/openapi/discussions/32
+  - number: 33
+    short: What did you ship unasked?
+    title: What did you ship this month that nobody asked for?
+    url: https://github.com/orgs/openapi/discussions/33

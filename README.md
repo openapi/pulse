@@ -99,8 +99,9 @@ The content lives in exactly one place. Repositories embed a stable URL and
 never need an editorial commit again — the update happens only here.
 
 ```text
-content/current.yml          ← the week, the CTA, the people queues
+content/current.yml          ← the edition number, the CTA, the people queues
 content/apis.yml             ← the API queue
+content/topics.yml           ← the discussion queue
         │
 generator/sync.py            ← refreshes the queues from their sources
 generator/build.py           ← renders both themes, embeds the avatars
@@ -146,7 +147,7 @@ destination — the card carries several stories but never competes with itself.
 
 ### The queues
 
-Three ordered queues decide what goes on the card. **The entry at the top of
+Four ordered queues decide what goes on the card. **The entry at the top of
 each one is what goes out next**, which makes curating them a single gesture:
 move a line to the top and it is on the next card. Publishing moves it to the
 bottom, so the queues keep turning on their own once you stop curating them.
@@ -156,8 +157,9 @@ bottom, so the queues keep turning on their own once you stop curating them.
 | `developers` | `content/current.yml` | [organization members](https://github.com/orgs/openapi/people) |
 | `contributors` | `content/current.yml` | [contributors registry](https://github.com/openapi/contributors) |
 | `apis` | `content/apis.yml` | [API library](https://console.openapi.com/apis) |
+| `topics` | `content/topics.yml` | [open discussions](https://github.com/openapi/discussions) |
 
-`sync.py` aligns all three with those sources:
+`sync.py` aligns all four with those sources:
 
 ```bash
 python3 generator/sync.py            # align the queues
@@ -173,6 +175,12 @@ dropped. It never decides what goes out next.
 The API library has no public JSON feed, so `sync.py` reads the server-rendered
 listing and keys on the `apiBox` markup. If that page is ever restructured the
 sync fails loudly rather than writing an empty queue.
+
+The topic queue picks up every open discussion except the Openapi Pulse
+editions themselves and the Announcements. Each entry carries a `short` — the
+label the card shows, since a track has room for roughly 35 characters and a
+real discussion title rarely fits. Without one it falls back to the title, and
+the fitter shrinks and clips it.
 
 Anyone under `exclude` is filtered out of the people queues no matter what the
 sources say. The card exists to give visibility to the people who work on and

@@ -32,6 +32,7 @@ from pools import item_key, read_block  # noqa: E402
 ROOT = Path(__file__).resolve().parent.parent
 CONTENT = ROOT / "content" / "current.yml"
 APIS = ROOT / "content" / "apis.yml"
+TOPICS = ROOT / "content" / "topics.yml"
 PUBLIC = ROOT / "public"
 CACHE = Path(__file__).resolve().parent / ".cache"
 
@@ -344,7 +345,7 @@ def build(theme_name, data, avatars):
 
     # --- editorial tracks ----------------------------------------------
     api = featured_api().get("name", "")
-    discussion = (data.get("discussion", {}) or {}).get("title", "")
+    discussion = featured_topic().get("card", "")
 
     parts.append(label_el(TRACKS[0], "API of the week", t))
     api_text, api_size = fit(api, TRACKS[0]["width"] - TRACK_PADDING)
@@ -418,17 +419,33 @@ def featured(data, key):
     return people[0] if people else ""
 
 
-def featured_api():
-    """The API at the top of content/apis.yml.
+def _head_record(path, key, fields):
+    """The record at the top of a queue file.
 
-    Read through the pool helpers rather than a YAML parser: the file is a list
-    of records, and this only ever needs the first one.
+    Read through the pool helpers rather than a YAML parser: these files are
+    lists of records, and this only ever needs the first one.
     """
-    lines = APIS.read_text(encoding="utf-8").splitlines()
-    _, _, items = read_block(lines, "apis")
+    lines = path.read_text(encoding="utf-8").splitlines()
+    _, _, items = read_block(lines, key)
     if not items:
         return {}
-    return {field: item_key(items[0], field) for field in ("slug", "name", "url")}
+    return {field: item_key(items[0], field) for field in fields}
+
+
+def featured_api():
+    """The API at the top of content/apis.yml."""
+    return _head_record(APIS, "apis", ("slug", "name", "url"))
+
+
+def featured_topic():
+    """The discussion at the top of content/topics.yml.
+
+    `short` is what the card shows; it falls back to the full title, which the
+    fitter will shrink and clip to the track.
+    """
+    topic = _head_record(TOPICS, "topics", ("number", "short", "title", "url"))
+    topic["card"] = topic.get("short") or topic.get("title", "")
+    return topic
 
 
 def main():
