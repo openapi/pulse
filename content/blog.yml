@@ -24,11 +24,6 @@
 # first one, so that survives.
 
 news:
-  - slug: openapi-launches-the-new-advanced-electronic-signature-with-otp-api
-    date: 2026-09-01
-    title: Openapi launches the new Advanced Electronic Signature with OTP API
-    url: https://openapi.com/blog/openapi-launches-the-new-advanced-electronic-signature-with-otp-api
-    excerpt: Integrate Advanced Electronic Signatures directly into your systems and simplify signing processes with secure identification and OTP authentication.
   - slug: openapi-launches-new-verification-payee-api
     date: 2026-08-12
     title: Verify the payee before payment: Openapi launches the new Verification of Payee API
@@ -36,11 +31,6 @@ news:
     excerpt: Block payment fraud in real time with open banking verification.
 
 insights:
-  - slug: omi-quotations-what-they-are-and-how-they-work
-    date: 2026-08-26
-    title: OMI Quotations: What They Are and How They Work
-    url: https://openapi.com/blog/omi-quotations-what-they-are-and-how-they-work
-    excerpt: How to read official Revenue Agency data to evaluate apartments and rental properties throughout Italy
   - slug: understanding-authentication-2fa-mfa-and-biometric-security
     date: 2026-08-06
     title: Understanding Authentication: 2FA, MFA and Biometric Security
@@ -97,3 +87,9 @@ relayed:
   - slug: bank-transfer-beneficiary-verification-vop-what-it-is-and-how-it-works
     queue: insights
     edition: 40
+  - slug: openapi-launches-the-new-advanced-electronic-signature-with-otp-api
+    queue: news
+    edition: 41
+  - slug: omi-quotations-what-they-are-and-how-they-work
+    queue: insights
+    edition: 41
