@@ -16,7 +16,7 @@
 # and content/topics.yml, because each of their entries is a record rather than
 # a bare handle.
 
-week: 38
+week: 39
 year: 2026
 
 # The card has a single call to action: the whole image links here.
@@ -64,7 +64,6 @@ exclude:
   - francescobianco
 
 developers:
-  - cipriani1194
   - FrancescoRicchiutiOpenapi
   - GiovanniOpenapi
   - Luca941-c
@@ -73,7 +72,8 @@ developers:
   - MicheleOpenApi
   - SimoneOpenapi
   - AlbertoVenanzoniAltravia
+  - cipriani1194
 
 contributors:
-  - Seraphim200001
   - Deadpool2000
+  - Seraphim200001
