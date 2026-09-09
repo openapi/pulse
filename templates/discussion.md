@@ -31,6 +31,7 @@ rotation.
 
 **[{{discussion_title}}]({{discussion_url}})**
 
+{{from_the_blog}}
 ---
 
 **[{{cta_text}} →]({{cta_url}})**

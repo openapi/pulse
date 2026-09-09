@@ -195,6 +195,44 @@ def head_revision():
         return "main"
 
 
+def category_url(owner, name, category):
+    slug = "-".join(str(category).lower().split())
+    return f"https://github.com/{owner}/{name}/discussions/categories/{slug}"
+
+
+def from_the_blog(data):
+    """The two blog articles this edition relays, as a section of the post.
+
+    The edition links the articles themselves rather than the posts that relay
+    them: those are created after this body is rendered, and the blog is where
+    the piece actually lives. The card says nothing about any of this — it has
+    four tracks and they belong to the community, not to the blog.
+
+    A queue that has run dry simply drops its line, and if both are empty the
+    whole section disappears.
+    """
+    settings = data.get("blog", {}) or {}
+    mapping = settings.get("relay", {}) or {}
+    owner, _, name = (data.get("discussions", {}) or {}).get(
+        "repo", "openapi/discussions").partition("/")
+
+    lines = []
+    for queue, category in mapping.items():
+        waiting = blog_queue(queue)
+        if not waiting:
+            continue
+        article = waiting[0]
+        lines.append(
+            f"**[{article['title']}]({article['url']})** — from "
+            f"*{BADGE_NAMES.get(queue, queue)}* on the "
+            f"[Openapi blog](https://openapi.com/blog), relayed in full to "
+            f"[{category}]({category_url(owner, name, category)}).")
+
+    if not lines:
+        return ""
+    return "### 📰 From the blog\n\n" + "\n\n".join(lines) + "\n"
+
+
 def render(data, revision):
     developer = featured(data, "developers")
     contributor = featured(data, "contributors")
@@ -212,6 +250,7 @@ def render(data, revision):
         "contributor": contributor,
         "discussion_title": topic.get("title", ""),
         "discussion_url": topic.get("url", ""),
+        "from_the_blog": from_the_blog(data),
         "cta_text": sentence_case(cta.get("text", "JOIN THE COMMUNITY")),
         "cta_url": cta.get("url", ""),
         "card_light": f"{RAW}/{revision}/public/ticker.svg",
