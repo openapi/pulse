@@ -433,8 +433,12 @@ def _head_record(path, key, fields):
 
 
 def featured_api():
-    """The API at the top of content/apis.yml."""
-    return _head_record(APIS, "apis", ("slug", "name", "url"))
+    """The API at the top of content/apis.yml.
+
+    `about` is the library's own one-line pitch. The card has no room for it —
+    it gets the name and nothing else — but the published edition does.
+    """
+    return _head_record(APIS, "apis", ("slug", "name", "url", "about"))
 
 
 def featured_topic():

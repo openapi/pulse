@@ -71,9 +71,11 @@ COMMENT_BLOCK = re.compile(r"<!--.*?-->", re.DOTALL)
 AVATAR_LINK = re.compile(
     r"https://github\.com/([A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?)\.png")
 API_BOX = re.compile(
-    r'<div id="([A-Za-z0-9_-]+)"\s+class="[^"]*\bapiBox\b[^"]*"'
-    r'.*?<h4[^>]*>\s*(.*?)\s*</h4>',
-    re.DOTALL)
+    r'<div id="([A-Za-z0-9_-]+)"\s+class="[^"]*\bapiBox\b[^"]*"', re.DOTALL)
+API_NAME = re.compile(r"<h4[^>]*>\s*(.*?)\s*</h4>", re.DOTALL)
+API_ABOUT = re.compile(
+    r'<p class="[^"]*\btext-muted\b[^"]*"[^>]*>\s*(.*?)\s*</p>', re.DOTALL)
+TAG = re.compile(r"<[^>]+>")
 
 
 def fetch(url, accept="application/vnd.github+json"):
@@ -176,20 +178,39 @@ def fetch_topics():
     return found
 
 
+def one_line(raw):
+    """Card copy carries markup, entities and the page's own indentation."""
+    return " ".join(html.unescape(TAG.sub("", raw)).split())
+
+
 def fetch_apis():
     """The API library, scraped from the console.
 
     The page is server-rendered, one `apiBox` div per API carrying the slug as
-    its id and the display name in the heading. There is no public JSON feed
-    for this list, so the markup is what there is to read.
+    its id, the display name in the heading and the one-line pitch in the
+    muted paragraph under it. There is no public JSON feed for this list, so
+    the markup is what there is to read.
+
+    Each box is parsed within its own slice of the page rather than by one
+    regex spanning the lot, so an API published without a description borrows
+    neither the name nor the pitch of the one after it.
     """
     page = fetch(API_LIBRARY, accept="text/html")
+    boxes = list(API_BOX.finditer(page))
     found = []
-    for slug, name in API_BOX.findall(page):
+    for index, box in enumerate(boxes):
+        end = boxes[index + 1].start() if index + 1 < len(boxes) else len(page)
+        card = page[box.end():end]
+        name = API_NAME.search(card)
+        if not name:
+            continue
+        about = API_ABOUT.search(card)
+        slug = box.group(1)
         found.append((slug, [
             f"  - slug: {slug}",
-            f"    name: {html.unescape(name).strip()}",
+            f"    name: {one_line(name.group(1))}",
             f"    url: {API_LIBRARY}/{slug}/info",
+            f"    about: {one_line(about.group(1)) if about else ''}",
         ]))
     if not found:
         sys.exit(f"no APIs found at {API_LIBRARY} — the page markup may have "
@@ -205,7 +226,7 @@ def sync_blog(lines):
     slugs already posted to Discussions, which never come back.
     """
     _, _, relayed_items = read_block(lines, "relayed", required=False)
-    relayed = {item_key(item) for item in relayed_items}
+    relayed = {item_key(item, "slug") for item in relayed_items}
 
     posts = fetch_posts()
     changed = False
@@ -249,7 +270,8 @@ def merge(current_keys, upstream):
     return kept + added, added, removed
 
 
-def sync_pool(path, lines, key, field, fetcher, description, exclude=()):
+def sync_pool(path, lines, key, field, fetcher, description, exclude=(),
+              refresh=False):
     upstream = [(k, v) for k, v in fetcher() if k not in exclude]
     start, end, items = read_block(lines, key)
     by_key = {item_key(item, field): item for item in items}
@@ -266,10 +288,17 @@ def sync_pool(path, lines, key, field, fetcher, description, exclude=()):
     if not added and not removed:
         print("  already in sync")
 
-    if order == current_keys:
+    # `refresh` decides who owns the *content* of an entry that is already
+    # here. For the APIs upstream does: a renamed API or a rewritten pitch
+    # should follow. For the topics it does not — `short` is the hand-written
+    # card label and nothing upstream knows about it.
+    source = upstream_map if refresh else {}
+    updated = [source.get(k) or by_key.get(k) or upstream_map[k] for k in order]
+    if order == current_keys and updated == items:
         return False
-    replace_block(lines, start, end,
-                  [by_key.get(k) or upstream_map[k] for k in order])
+    if order == current_keys:
+        print("  ~ entries refreshed from the source")
+    replace_block(lines, start, end, updated)
     return True
 
 
@@ -293,7 +322,7 @@ def main():
                                      fetcher, description, exclude=excluded)
 
     changed_apis = sync_pool(APIS, api_lines, "apis", "slug",
-                             fetch_apis, "API library")
+                             fetch_apis, "API library", refresh=True)
 
     topic_lines = TOPICS.read_text(encoding="utf-8").splitlines()
     upstream_topics = fetch_topics()

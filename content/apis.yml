@@ -8,90 +8,122 @@
 #   https://console.openapi.com/apis
 # It preserves the order you set: APIs already here keep their position, ones
 # newly published by Openapi are appended to the bottom, and ones that
-# disappear from the library are dropped.
+# disappear from the library are dropped. The rest of each record follows the
+# library, so a renamed API or a rewritten pitch lands here on the next sync.
+#
+# `about` is the library's own one-line pitch. The card shows only the name —
+# there is no room for more — but the published edition carries the pitch.
 
 apis:
   - slug: esignature
     name: eSignature
     url: https://console.openapi.com/apis/esignature/info
+    about: eSignature solutions with European validity, all available in one API
   - slug: exchange
     name: Exchange Rate
     url: https://console.openapi.com/apis/exchange/info
+    about: Check foreign currency exchange rates worldwide
   - slug: geocoding
     name: Geocoding
     url: https://console.openapi.com/apis/geocoding/info
+    about: From street addresses to geographical coordinates (and vice versa) in just a second
   - slug: invoice
     name: Invoice
     url: https://console.openapi.com/apis/invoice/info
+    about: Send Electronic Invoices and e-Receipts Easily, Quickly and Securely
   - slug: marchetemporali
     name: Time Stamping
     url: https://console.openapi.com/apis/marchetemporali/info
+    about: Date and time stamp any document
   - slug: realestate
     name: Real Estate
     url: https://console.openapi.com/apis/realestate/info
+    about: The fundamental data for any effective real estate valuation!
   - slug: risk
     name: Risk
     url: https://console.openapi.com/apis/risk/info
+    about: All reports and data to verify the reliability of private and legal entities
   - slug: smsv2
     name: SMS v2
     url: https://console.openapi.com/apis/smsv2/info
+    about: High-Quality SMS with a custom sender, real-time delivery reports, and instant sending.
   - slug: trust
     name: Trust
     url: https://console.openapi.com/apis/trust/info
+    about: Trust is the best solution to prevent malicious actions on your platform through APIs.
   - slug: ufficiopostale
     name: Postal Service
     url: https://console.openapi.com/apis/ufficiopostale/info
+    about: All your mailings via API and in real time
   - slug: cap
     name: Zip Codes
     url: https://console.openapi.com/apis/cap/info
+    about: All updated data on zip codes, municipalities, provinces, regions via API
   - slug: catasto
     name: Italian cadastre
     url: https://console.openapi.com/apis/catasto/info
+    about: All cadastral data and property owners in Italy
   - slug: docuengine
     name: DocuEngine
     url: https://console.openapi.com/apis/docuengine/info
+    about: All official documents from the Business Register, Revenue Agency, Municipalities, and INPS
   - slug: visure-camerali
     name: Chamber of Commerce Company Registrations
     url: https://console.openapi.com/apis/visure-camerali/info
+    about: The documents of the Italian Chamber of Commerce in seconds and without search costs
   - slug: pecmassiva
     name: Massive REM
     url: https://console.openapi.com/apis/pecmassiva/info
+    about: The easiest and most secure solution for sending your Massive REMs
   - slug: pec
     name: Italian certified e-mail
     url: https://console.openapi.com/apis/pec/info
+    about: Legalmail CEM for sending communications and documents securely and with full legal value
   - slug: sdi
     name: SDI Electronic Invoicing
     url: https://console.openapi.com/apis/sdi/info
+    about: Electronic invoicing easy, fast and with high security standards
   - slug: bollettini
     name: Paying Bills
     url: https://console.openapi.com/apis/bollettini/info
+    about: Bills payment via API and in real time
   - slug: domains
     name: .it Domains
     url: https://console.openapi.com/apis/domains/info
+    about: The only API to activate and manage .it domains in real time
   - slug: pdf
     name: PDF
     url: https://console.openapi.com/apis/pdf/info
+    about: The only API to transform HTML content into PDF, which also renders JavaScript code
   - slug: oauth
     name: Oauth
     url: https://console.openapi.com/apis/oauth/info
+    about: API OAuth v1 has been replaced by the endpoints available in OAuth v2.
   - slug: sms
     name: SMS v1
     url: https://console.openapi.com/apis/sms/info
+    about: API SMS v1 has been replaced by the endpoints available in SMS v2.
   - slug: visengine
     name: Visengine
     url: https://console.openapi.com/apis/visengine/info
+    about: All official documents from Chamber of Commerce, INPS and Tax Agency
   - slug: firma
     name: Digital Signature
     url: https://console.openapi.com/apis/firma/info
+    about: The API has been replaced by the endpoints available in eSignature
   - slug: oauthv2
     name: Oauth V2
     url: https://console.openapi.com/apis/oauthv2/info
+    about: A secure access key to all APIs, with the ability to set granular and customized usage limits.
   - slug: ai
     name: AI
     url: https://console.openapi.com/apis/ai/info
+    about: Integrate the power of language models with your company’s data to deliver accurate and contextualized answers.
   - slug: automotive
     name: Automotive
     url: https://console.openapi.com/apis/automotive/info
+    about: All the latest information on cars, motorbikes, insurance available in real time and globally.
   - slug: company
     name: Company
     url: https://console.openapi.com/apis/company/info
+    about: All the data about companies in a single API and in just a few seconds

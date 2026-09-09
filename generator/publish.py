@@ -33,6 +33,7 @@ retried on the next edition.
 """
 
 import json
+import re
 import subprocess
 import sys
 from datetime import date
@@ -178,6 +179,12 @@ def resolve_category(owner, name, wanted, required=True):
 # post body
 # --------------------------------------------------------------------------
 
+def full_stop(text):
+    """The library writes its pitches as labels, half of them without a stop."""
+    text = str(text).strip()
+    return text + "." if text and text[-1] not in ".!?:" else text
+
+
 def sentence_case(text):
     """"JOIN THE COMMUNITY" reads as shouting in prose; the card can shout."""
     text = str(text).strip()
@@ -246,6 +253,7 @@ def render(data, revision):
         "date": date.today().isoformat(),
         "api_name": api.get("name", ""),
         "api_url": api.get("url", ""),
+        "api_about": full_stop(api.get("about", "")),
         "developer": developer,
         "contributor": contributor,
         "discussion_title": topic.get("title", ""),
@@ -260,7 +268,10 @@ def render(data, revision):
     body = TEMPLATE.read_text(encoding="utf-8")
     for key, value in values.items():
         body = body.replace("{{" + key + "}}", str(value))
-    return body
+    # A field the source left empty — an API with no pitch, a drained blog
+    # queue — leaves a hole where its paragraph was. Close it rather than
+    # publishing the gap.
+    return re.sub(r"\n{3,}", "\n\n", body)
 
 
 def index_body(data, edition_url, revision):
@@ -307,13 +318,26 @@ def blog_queue(queue):
             for item in items]
 
 
-def retire(queue, slug):
+def relayed_editions(queue):
+    """The editions in which this queue has already sent something out."""
+    lines = BLOG.read_text(encoding="utf-8").splitlines()
+    _, _, items = read_block(lines, "relayed", required=False)
+    return {item_key(item, "edition") for item in items
+            if item_key(item, "queue") == queue}
+
+
+def retire(queue, slug, edition):
     """Move a relayed article out of its queue and into `relayed:`.
 
     Rotation is what the other queues do — they turn, and everything comes
     round again. An article does not: it is relayed once. So this is a removal,
     and it is done here, by whatever actually posted it, rather than by
     rotate.py — which would retire an article the relay never managed to send.
+
+    The edition is recorded with the slug, which is what makes running this
+    script twice in one edition harmless: without it a second run would find
+    the *next* article at the top of the queue and cheerfully send that out
+    too.
     """
     lines = BLOG.read_text(encoding="utf-8").splitlines()
 
@@ -327,7 +351,11 @@ def retire(queue, slug):
 
     start, end, items = read_block(lines, "relayed", required=False)
     if start is not None:
-        replace_block(lines, start, end, items + [[f"  - {slug}"]])
+        replace_block(lines, start, end, items + [[
+            f"  - slug: {slug}",
+            f"    queue: {queue}",
+            f"    edition: {edition}",
+        ]])
 
     BLOG.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
@@ -365,9 +393,16 @@ def relay_blog(data, owner, name, dry_run=False, force=False):
     if not mapping:
         return
 
+    edition = str(data.get("week", ""))
+
     print("\nblog relay:")
     for queue, category_name in mapping.items():
         badge = BADGE_NAMES.get(queue, queue)
+        if not dry_run and edition in relayed_editions(queue):
+            print(f"  {queue}: already relayed in edition {edition} — "
+                  f"nothing more goes out until the queues advance")
+            continue
+
         waiting = blog_queue(queue)
         if not waiting:
             print(f"  {queue}: nothing waiting — nothing to relay")
@@ -393,7 +428,7 @@ def relay_blog(data, owner, name, dry_run=False, force=False):
         clash = next((d for d in existing if d["title"] == title), None)
         if clash and not force:
             print(f"  {queue}: already relayed as {clash['url']} — retiring it")
-            retire(queue, article["slug"])
+            retire(queue, article["slug"], edition)
             continue
 
         created = graphql(CREATE_MUTATION, {
@@ -402,7 +437,7 @@ def relay_blog(data, owner, name, dry_run=False, force=False):
         })["createDiscussion"]["discussion"]
         print(f"  {queue} → {category_name}: {title}\n"
               f"    {created['url']}")
-        retire(queue, article["slug"])
+        retire(queue, article["slug"], edition)
 
 
 # --------------------------------------------------------------------------

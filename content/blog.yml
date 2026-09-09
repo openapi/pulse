@@ -99,7 +99,13 @@ insights:
     image: https://openapi.com/assets/content/en/news/images/cover/invoicing.png
     excerpt: Mandatory B2B E-Invoicing in Germany: A Practical Guide to Issuing and Transmitting Electronic Invoices
 
-# Slugs already relayed to Discussions. Nothing here is ever posted again.
+# Articles already relayed to Discussions. Nothing here is ever posted again,
+# and the edition each one went out with is what stops a second run of
+# publish.py in the same edition from sending the next article after it.
 relayed:
-  - pec-api-more-control-flexibility-and-new-management-possibilities
-  - bank-transfer-beneficiary-verification-vop-what-it-is-and-how-it-works
+  - slug: pec-api-more-control-flexibility-and-new-management-possibilities
+    queue: news
+    edition: 40
+  - slug: bank-transfer-beneficiary-verification-vop-what-it-is-and-how-it-works
+    queue: insights
+    edition: 40

@@ -13,7 +13,9 @@ ecosystem, and one invitation to step in.
 
 ### 🔌 API of the week
 
-**[{{api_name}}]({{api_url}})**
+This week we are pointing you at **[{{api_name}}]({{api_url}})**.
+
+{{api_about}}
 
 ### 👩‍💻 Developer of the week
 
