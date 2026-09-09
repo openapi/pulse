@@ -18,9 +18,9 @@
   <rect x="0.5" y="0.5" width="879" height="147" rx="10" fill="#0d1117" stroke="#2c3440"/>
   <path d="M0.5 10.5A10 10 0 0 1 10.5 0.5H869.5A10 10 0 0 1 879.5 10.5V47.5H0.5Z" fill="#111823"/>
   <line x1="0.5" y1="47.5" x2="879.5" y2="47.5" stroke="#2c3440"/>
-  <g stroke="#ff6369" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M26 24h8l4-9 6 18 4-9h8"/></g>
-  <circle class="ring" cx="56" cy="24" r="3" fill="none" stroke="#ff6369" stroke-width="1.5"/>
-  <circle class="dot" cx="56" cy="24" r="3" fill="#ff6369"/>
+  <g stroke="#9c7ecc" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M26 24h8l4-9 6 18 4-9h8"/></g>
+  <circle class="ring" cx="56" cy="24" r="3" fill="none" stroke="#9c7ecc" stroke-width="1.5"/>
+  <circle class="dot" cx="56" cy="24" r="3" fill="#9c7ecc"/>
   <text x="72" y="29" fill="#e6edf3" font-size="13" font-weight="700" letter-spacing="1.6">OPENAPI PULSE</text>
   <text x="210" y="29" fill="#9198a1" font-size="13" font-weight="700">·</text>
   <text x="224" y="29" fill="#9198a1" font-size="13" font-weight="600" letter-spacing="1.6">WEEK 37</text>
@@ -43,5 +43,5 @@
   <line x1="177" y1="66" x2="177" y2="110" stroke="#212a35"/>
   <line x1="408" y1="66" x2="408" y2="110" stroke="#212a35"/>
   <line x1="629" y1="66" x2="629" y2="110" stroke="#212a35"/>
-  <g clip-path="url(#card)"><g transform="translate(0 127)"><line x1="24" y1="0" x2="856" y2="0" stroke="#2c3440" stroke-width="1.5"/><g stroke="#ff6369" stroke-width="2" fill="none" opacity="0.75" stroke-linecap="round" stroke-linejoin="round"><path class="trace" d="M0 0h96l6-10 5 20 6-10h74" transform="translate(24 0)"/></g></g></g>
+  <g clip-path="url(#card)"><g transform="translate(0 127)"><line x1="24" y1="0" x2="856" y2="0" stroke="#2c3440" stroke-width="1.5"/><g stroke="#9c7ecc" stroke-width="2" fill="none" opacity="0.75" stroke-linecap="round" stroke-linejoin="round"><path class="trace" d="M0 0h96l6-10 5 20 6-10h74" transform="translate(24 0)"/></g></g></g>
 </svg>

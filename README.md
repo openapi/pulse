@@ -220,7 +220,9 @@ python3 generator/build.py
   initial-letter monogram instead of breaking the build.
 * **No external assets at all** — system font stack, no web fonts, no scripts.
 * The heartbeat mark and the trace along the bottom edge are CSS animations,
-  disabled under `prefers-reduced-motion`.
+  disabled under `prefers-reduced-motion`. They carry the OpenAPI purple —
+  `#563e7d` on light, lightened to `#9c7ecc` on dark, where the brand value
+  itself would all but disappear against `#0d1117`.
 * Values are **fitted** to their track: the type shrinks from 14px down to 10px
   to make a long value fit, and only what still overflows at the smallest size
   is clipped. Real handles run long — `@FrancescoRicchiutiOpenapi` is 25
@@ -229,7 +231,6 @@ python3 generator/build.py
 
 ### Still to refine
 
-* Final palette and accent — the red is a placeholder for the OpenAPI brand.
 * Wordmark/logo instead of the plain `OPENAPI PULSE` type.
 * Hosting: `raw.githubusercontent.com` works today; GitHub Pages
   (`openapi.github.io/pulse/ticker.svg`) or a dedicated endpoint would give
