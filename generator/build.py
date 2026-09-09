@@ -282,7 +282,7 @@ def build(theme_name, data, avatars):
     t = THEMES[theme_name]
     week = data.get("week", "")
     cta = data.get("cta", {}) or {}
-    cta_text = clip(cta.get("text", "JOIN THE CONVERSATION"), 30)
+    cta_text = clip(cta.get("text", "JOIN THE COMMUNITY"), 30)
     developer = featured(data, "developers")
     contributor = featured(data, "contributors")
 

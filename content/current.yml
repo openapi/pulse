@@ -9,7 +9,7 @@ year: 2026
 
 # CTA unica: dove punta l'intera card quando viene cliccata nel README.
 cta:
-  text: JOIN THE CONVERSATION
+  text: JOIN THE COMMUNITY
   url: https://github.com/orgs/openapi/discussions
 
 api_of_week:

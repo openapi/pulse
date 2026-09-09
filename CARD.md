@@ -102,7 +102,7 @@ community
 Quindi la card può mostrare più contenuti, ma deve avere una CTA unica come:
 
 ```text
-JOIN THE CONVERSATION →
+JOIN THE COMMUNITY →
 ```
 
 ## Relazione con Pulse
@@ -144,7 +144,7 @@ discussion:
   url: https://github.com/orgs/openapi/discussions/...
 
 cta:
-  text: Join the conversation
+  text: Join the community
 ```
 
 Una GitHub Action può rigenerare automaticamente gli SVG ogni settimana.

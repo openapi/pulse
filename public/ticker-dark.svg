@@ -24,8 +24,8 @@
   <text x="72" y="29" fill="#e6edf3" font-size="13" font-weight="700" letter-spacing="1.6">OPENAPI PULSE</text>
   <text x="210" y="29" fill="#9198a1" font-size="13" font-weight="700">·</text>
   <text x="224" y="29" fill="#9198a1" font-size="13" font-weight="600" letter-spacing="1.6">WEEK 37</text>
-  <rect x="642" y="12" width="214" height="24" rx="12" fill="#e6edf3"/>
-  <text x="749.0" y="28" fill="#0d1117" font-size="11" font-weight="700" letter-spacing="1.2" text-anchor="middle">JOIN THE CONVERSATION  →</text>
+  <rect x="666" y="12" width="190" height="24" rx="12" fill="#e6edf3"/>
+  <text x="761.0" y="28" fill="#0d1117" font-size="11" font-weight="700" letter-spacing="1.2" text-anchor="middle">JOIN THE COMMUNITY  →</text>
   <text x="24" y="76" fill="#9198a1" font-size="9" font-weight="700" letter-spacing="1.2">API OF THE WEEK</text>
   <text x="24" y="103" fill="#e6edf3" font-size="14" font-weight="600">Open-Meteo</text>
   <text x="190" y="76" fill="#9198a1" font-size="9" font-weight="700" letter-spacing="1.2">DEVELOPER OF THE WEEK</text>
