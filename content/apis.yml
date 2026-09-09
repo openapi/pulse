@@ -11,9 +11,6 @@
 # disappear from the library are dropped.
 
 apis:
-  - slug: automotive
-    name: Automotive
-    url: https://console.openapi.com/apis/automotive/info
   - slug: company
     name: Company
     url: https://console.openapi.com/apis/company/info
@@ -95,3 +92,6 @@ apis:
   - slug: ai
     name: AI
     url: https://console.openapi.com/apis/ai/info
+  - slug: automotive
+    name: Automotive
+    url: https://console.openapi.com/apis/automotive/info

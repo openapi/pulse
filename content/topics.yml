@@ -14,10 +14,6 @@
 # in the published post. A topic without a `short` falls back to its title.
 
 topics:
-  - number: 5
-    short: Docs pages worth copying
-    title: The API docs page you wish every provider would copy
-    url: https://github.com/orgs/openapi/discussions/5
   - number: 6
     short: Is this API worth integrating?
     title: How do you decide an API is worth an integration?
@@ -134,3 +130,7 @@ topics:
     short: What makes you trust an API?
     title: What makes you trust an API you have never used before?
     url: https://github.com/orgs/openapi/discussions/4
+  - number: 5
+    short: Docs pages worth copying
+    title: The API docs page you wish every provider would copy
+    url: https://github.com/orgs/openapi/discussions/5
