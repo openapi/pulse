@@ -38,7 +38,7 @@ cta:
 discussions:
   repo: openapi/discussions
   category: Openapi Pulse
-  index: null
+  index: 3
 
 # The discussion the card puts in the spotlight.
 discussion:
