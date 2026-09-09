@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="132" viewBox="0 0 880 132" role="img" aria-label="OpenAPI Pulse — week 37">
+  <title>OpenAPI Pulse — week 37</title>
+  <style>
+    text { font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,'Liberation Sans',sans-serif; }
+    .dot, .ring { transform-box: fill-box; transform-origin: center; }
+    .dot { animation: beat 1.6s ease-in-out infinite; }
+    .ring { animation: halo 1.6s ease-out infinite; }
+    .trace { transform: translateX(24px); animation: trace 9s linear infinite; }
+    @keyframes beat { 0%, 100% { opacity: 1; transform: scale(1); } 45% { opacity: 0.55; transform: scale(0.7); } }
+    @keyframes halo { 0% { opacity: 0.7; transform: scale(1); } 70%, 100% { opacity: 0; transform: scale(2.6); } }
+    @keyframes trace { from { transform: translateX(24px); } to { transform: translateX(669px); } }
+    @media (prefers-reduced-motion: reduce) {
+      .dot, .ring, .trace { animation: none; }
+      .ring { opacity: 0; }
+    }
+  </style>
+  <defs><clipPath id="card"><rect x="1" y="1" width="878" height="130" rx="9.5"/></clipPath></defs>
+  <rect x="0.5" y="0.5" width="879" height="131" rx="10" fill="#0d1117" stroke="#2c3440"/>
+  <path d="M0.5 10.5A10 10 0 0 1 10.5 0.5H869.5A10 10 0 0 1 879.5 10.5V47.5H0.5Z" fill="#111823"/>
+  <line x1="0.5" y1="47.5" x2="879.5" y2="47.5" stroke="#2c3440"/>
+  <g stroke="#ff6369" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M26 24h8l4-9 6 18 4-9h8"/></g>
+  <circle class="ring" cx="56" cy="24" r="3" fill="none" stroke="#ff6369" stroke-width="1.5"/>
+  <circle class="dot" cx="56" cy="24" r="3" fill="#ff6369"/>
+  <text x="72" y="29" fill="#e6edf3" font-size="13" font-weight="700" letter-spacing="1.6">OPENAPI PULSE</text>
+  <text x="210" y="29" fill="#9198a1" font-size="13" font-weight="700">·</text>
+  <text x="224" y="29" fill="#9198a1" font-size="13" font-weight="600" letter-spacing="1.6">WEEK 37</text>
+  <rect x="642" y="12" width="214" height="24" rx="12" fill="#e6edf3"/>
+  <text x="749.0" y="28" fill="#0d1117" font-size="11" font-weight="700" letter-spacing="1.2" text-anchor="middle">JOIN THE CONVERSATION  →</text>
+  <text x="28" y="74" fill="#9198a1" font-size="9.5" font-weight="700" letter-spacing="1.4">API OF THE WEEK</text>
+  <text x="28" y="97" fill="#e6edf3" font-size="15" font-weight="600">Open-Meteo</text>
+  <text x="328" y="74" fill="#9198a1" font-size="9.5" font-weight="700" letter-spacing="1.4">DEVELOPER OF THE WEEK</text>
+  <text x="328" y="97" fill="#e6edf3" font-size="15" font-weight="600">@foobar</text>
+  <text x="610" y="74" fill="#9198a1" font-size="9.5" font-weight="700" letter-spacing="1.4">COMMUNITY DISCUSSION</text>
+  <text x="610" y="97" fill="#e6edf3" font-size="15" font-weight="600">Do agents still need SDKs?</text>
+  <line x1="306" y1="64" x2="306" y2="102" stroke="#212a35"/>
+  <line x1="588" y1="64" x2="588" y2="102" stroke="#212a35"/>
+  <g clip-path="url(#card)"><g transform="translate(0 111)"><line x1="24" y1="0" x2="856" y2="0" stroke="#2c3440" stroke-width="1.5"/><g stroke="#ff6369" stroke-width="2" fill="none" opacity="0.75" stroke-linecap="round" stroke-linejoin="round"><path class="trace" d="M0 0h96l6-10 5 20 6-10h74" transform="translate(24 0)"/></g></g></g>
+</svg>

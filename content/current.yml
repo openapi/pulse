@@ -1,0 +1,21 @@
+# OpenAPI Pulse — contenuto editoriale della settimana.
+# Questo è l'UNICO file da aggiornare ogni settimana.
+# Il generatore (generator/build.py) rigenera public/ticker.svg e public/ticker-dark.svg.
+
+week: 37
+year: 2026
+
+# CTA unica: dove punta l'intera card quando viene cliccata nel README.
+cta:
+  text: JOIN THE CONVERSATION
+  url: https://github.com/orgs/openapi/discussions
+
+# Le tre colonne editoriali. Tenere i valori corti (max ~26 caratteri)
+# per non far uscire il testo dalla colonna.
+columns:
+  - label: API OF THE WEEK
+    value: Open-Meteo
+  - label: DEVELOPER OF THE WEEK
+    value: "@foobar"
+  - label: COMMUNITY DISCUSSION
+    value: Do agents still need SDKs?

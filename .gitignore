@@ -28,3 +28,10 @@ Homestead.json
 .env.production
 .phpactor.json
 auth.json
+
+# Python
+__pycache__/
+*.pyc
+
+# IDE
+.idea/

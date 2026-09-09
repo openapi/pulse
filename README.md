@@ -2,6 +2,19 @@
 
 > **The heartbeat of the Openapi open-source ecosystem.**
 
+<p align="center">
+  <a href="https://github.com/orgs/openapi/discussions">
+    <picture>
+      <source media="(prefers-color-scheme: dark)"
+              srcset="https://raw.githubusercontent.com/openapi/pulse/main/public/ticker-dark.svg">
+      <source media="(prefers-color-scheme: light)"
+              srcset="https://raw.githubusercontent.com/openapi/pulse/main/public/ticker.svg">
+      <img alt="OpenAPI Pulse — this week in the OpenAPI community"
+           src="https://raw.githubusercontent.com/openapi/pulse/main/public/ticker.svg">
+    </picture>
+  </a>
+</p>
+
 **Pulse** is the coordination and automation hub behind the continuous activity of the Openapi GitHub ecosystem.
 
 Open-source ecosystems grow through consistency.
@@ -66,6 +79,110 @@ For example:
 ```
 
 Pulse turns isolated maintenance activities into a continuous process.
+
+## The Pulse Card
+
+The **Pulse Card** is the component the Pulse engine distributes: a single SVG,
+embedded once near the top of every repository README in the organization, that
+acts as a weekly news ticker for the ecosystem and routes readers to a single
+call to action — the Discussions.
+
+The card above is live. This is the prototype currently in `public/`.
+
+### How it works
+
+The content lives in exactly one place. Repositories embed a stable URL and
+never need an editorial commit again — the weekly update happens only here.
+
+```text
+content/current.yml          ← the only file edited each week
+        │
+generator/build.py           ← renders both themes
+        │
+public/ticker.svg
+public/ticker-dark.svg
+        │
+        ├──────────────► openapi/<repo-python> / README
+        ├──────────────► openapi/<repo-php>    / README
+        ├──────────────► openapi/<repo-js>     / README
+        └──────────────► every other repository
+```
+
+### Embedding it in a repository
+
+Place this right after the title and the main badges:
+
+```html
+<p align="center">
+  <a href="https://github.com/orgs/openapi/discussions">
+    <picture>
+      <source media="(prefers-color-scheme: dark)"
+              srcset="https://raw.githubusercontent.com/openapi/pulse/main/public/ticker-dark.svg">
+      <source media="(prefers-color-scheme: light)"
+              srcset="https://raw.githubusercontent.com/openapi/pulse/main/public/ticker.svg">
+      <img alt="OpenAPI Pulse"
+           src="https://raw.githubusercontent.com/openapi/pulse/main/public/ticker.svg">
+    </picture>
+  </a>
+</p>
+```
+
+The `<picture>` element gives the card a light and a dark variant so it sits
+naturally in both GitHub themes. The whole image is one link, with one
+destination — the card carries several stories but never competes with itself.
+
+### Updating the card
+
+Edit `content/current.yml`, regenerate, commit:
+
+```bash
+$EDITOR content/current.yml
+python3 generator/build.py
+git commit -am "pulse: week 38"
+```
+
+`current.yml` holds the week number, the three editorial columns and the CTA:
+
+```yaml
+week: 37
+
+cta:
+  text: JOIN THE CONVERSATION
+  url: https://github.com/orgs/openapi/discussions
+
+columns:
+  - label: API OF THE WEEK
+    value: Open-Meteo
+  - label: DEVELOPER OF THE WEEK
+    value: "@foobar"
+  - label: COMMUNITY DISCUSSION
+    value: Do agents still need SDKs?
+```
+
+Column values are clipped at 28 characters so the three tracks never collide.
+
+### Design notes
+
+* **880 × 132**, one line of identity and one line of content — small enough not
+  to steal space from the project, distinctive enough to be recognized across
+  repositories.
+* **Editorial, not CI.** No Shields-style key/value pills: a badge says
+  `build | passing`, the Pulse Card says *this week in the community*.
+* **No external assets.** System font stack, no web fonts, no scripts — GitHub
+  serves README images through a caching proxy that would drop them.
+* The heartbeat mark and the trace along the bottom edge are CSS animations,
+  disabled under `prefers-reduced-motion`.
+
+### Still to refine
+
+* Final palette and accent — the red is a placeholder for the OpenAPI brand.
+* Wordmark/logo instead of the plain `OPENAPI PULSE` type.
+* Hosting: `raw.githubusercontent.com` works today; GitHub Pages
+  (`openapi.github.io/pulse/ticker.svg`) or a dedicated endpoint would give
+  proper control over cache headers.
+* A `publish-pulse.yml` workflow to regenerate and commit the SVGs weekly.
+
+See [CARD.md](CARD.md) for the full rationale behind the component.
 
 ## Repository of the Week
 
