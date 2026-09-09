@@ -1,0 +1,83 @@
+# The heartbeat itself: one edition of the Pulse, start to finish.
+#
+# Daily for now, on purpose — the cadence is short so the whole loop can be
+# watched working day after day before it is trusted with a weekly rhythm.
+# Switching to weekly is one line: see the cron below.
+#
+# Order matters. The card is built and committed BEFORE the post goes out, so
+# the discussion can link the SVG at an immutable commit and keep showing the
+# card it was published with. The queues are rotated AFTER, so the entry at the
+# top of each file is always the one going out next — which is what makes
+# curating them a matter of dragging a line to the top.
+#
+# If publishing fails, rotation never runs and the same edition is retried on
+# the next pass instead of being silently skipped.
+
+name: Pulse
+
+on:
+  schedule:
+    # Daily at 07:00 UTC while the loop is being watched.
+    # Weekly, Monday only: "0 7 * * 1"
+    - cron: "0 7 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pulse
+  cancel-in-progress: false
+
+jobs:
+  edition:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install PyYAML
+        run: pip install --quiet pyyaml
+
+      - name: Refresh the queues from their sources
+        run: python generator/sync.py
+
+      - name: Build the card for this edition
+        run: python generator/build.py
+
+      - name: Commit the card
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- content public; then
+            echo "nothing changed"
+          else
+            git add content public
+            git commit -m "pulse: card for edition $(python -c "
+          import sys; sys.path.insert(0, 'generator')
+          from build import load_content; print(load_content()['week'])")"
+            git push
+          fi
+
+      - name: Publish the edition to Discussions
+        env:
+          # The discussions live in openapi/discussions, a different repository
+          # from this one, so the workflow's built-in GITHUB_TOKEN cannot write
+          # there. This needs a PAT with write access to that repository.
+          PULSE_DISCUSSIONS_TOKEN: ${{ secrets.PULSE_DISCUSSIONS_TOKEN }}
+        run: |
+          if [ -z "$PULSE_DISCUSSIONS_TOKEN" ]; then
+            echo "::error::PULSE_DISCUSSIONS_TOKEN is not set — see the README"
+            exit 1
+          fi
+          python generator/publish.py
+
+      - name: Advance the queues for the next edition
+        run: |
+          python generator/rotate.py
+          git add content
+          git commit -m "pulse: advance the queues"
+          git push

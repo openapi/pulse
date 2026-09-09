@@ -26,8 +26,12 @@ from urllib.error import URLError, HTTPError
 from urllib.request import Request, urlopen
 from xml.sax.saxutils import escape
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from pools import item_key, read_block  # noqa: E402
+
 ROOT = Path(__file__).resolve().parent.parent
 CONTENT = ROOT / "content" / "current.yml"
+APIS = ROOT / "content" / "apis.yml"
 PUBLIC = ROOT / "public"
 CACHE = Path(__file__).resolve().parent / ".cache"
 
@@ -177,6 +181,8 @@ def _scalar(value):
     value = value.strip()
     if value[:1] in "\"'" and value[:1] == value[-1:]:
         value = value[1:-1]
+    if value == "null":
+        return None
     if value.isdigit():
         return int(value)
     return value
@@ -337,7 +343,7 @@ def build(theme_name, data, avatars):
     )
 
     # --- editorial tracks ----------------------------------------------
-    api = (data.get("api_of_week", {}) or {}).get("name", "")
+    api = featured_api().get("name", "")
     discussion = (data.get("discussion", {}) or {}).get("title", "")
 
     parts.append(label_el(TRACKS[0], "API of the week", t))
@@ -407,9 +413,22 @@ def build(theme_name, data, avatars):
 
 
 def featured(data, key):
-    """The person on stage this week: always the head of the rotation list."""
+    """Who is on stage: always the entry at the top of the queue."""
     people = data.get(key) or []
     return people[0] if people else ""
+
+
+def featured_api():
+    """The API at the top of content/apis.yml.
+
+    Read through the pool helpers rather than a YAML parser: the file is a list
+    of records, and this only ever needs the first one.
+    """
+    lines = APIS.read_text(encoding="utf-8").splitlines()
+    _, _, items = read_block(lines, "apis")
+    if not items:
+        return {}
+    return {field: item_key(items[0], field) for field in ("slug", "name", "url")}
 
 
 def main():
@@ -422,8 +441,8 @@ def main():
         if nickname and nickname not in avatars:
             avatars[nickname] = avatar_data_uri(nickname)
 
-    print(f"week {data.get('week')}: @{developer} (developer), "
-          f"@{contributor} (contributor)")
+    print(f"edition {data.get('week')}: {featured_api().get('name', '?')} (api), "
+          f"@{developer} (developer), @{contributor} (contributor)")
 
     PUBLIC.mkdir(exist_ok=True)
     for name, theme in THEMES.items():

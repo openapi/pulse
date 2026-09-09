@@ -1,53 +1,71 @@
-# OpenAPI Pulse — contenuto editoriale della settimana.
-# Questo è l'UNICO file da aggiornare. Il generatore rigenera i due SVG:
+# OpenAPI Pulse — the editorial content of the next edition.
 #
-#   python3 generator/rotate.py   # avanza la settimana e ruota le liste
-#   python3 generator/build.py    # rigenera public/ticker.svg e ticker-dark.svg
+# Everything here describes the edition that goes out NEXT. The entry at the
+# top of each queue is the one that will be on the card; publishing moves it to
+# the bottom, so the queues keep turning on their own once you stop curating
+# them. To choose who or what comes up next, move a line to the top.
+#
+# The full cycle, once per edition:
+#
+#   python3 generator/sync.py      # refresh the queues from their sources
+#   python3 generator/build.py     # render the card for the top of each queue
+#   python3 generator/publish.py   # post the edition to Discussions
+#   python3 generator/rotate.py    # advance the queues for the next one
+#
+# The APIs live in their own file, content/apis.yml, because each entry is a
+# record rather than a bare handle.
 
 week: 37
 year: 2026
 
-# CTA unica: dove punta l'intera card quando viene cliccata nel README.
+# The card has a single call to action: the whole image links here.
 cta:
   text: JOIN THE COMMUNITY
   url: https://github.com/orgs/openapi/discussions
 
-api_of_week:
-  name: Open-Meteo
-  url: https://open-meteo.com
+# --- Publishing to GitHub Discussions ---------------------------------------
+# `publish.py` opens one post per edition in the category named below.
+#
+# The category CANNOT be created through the API — there is no mutation and no
+# REST endpoint for it. Create it once by hand at
+#   https://github.com/openapi/discussions/discussions/categories
+#
+# Pinning cannot be automated either: Repository.pinnedDiscussions is readable,
+# but nothing writes it. The way around it is to create ONE permanent
+# discussion, pin it by hand once, and record its number here. `publish.py`
+# rewrites that post's body every edition, so the pinned entry always points at
+# the latest one without ever needing to be pinned again.
+discussions:
+  repo: openapi/discussions
+  category: Openapi Pulse
+  index: null
 
+# The discussion the card puts in the spotlight.
 discussion:
   title: Do agents still need SDKs?
   url: https://github.com/orgs/openapi/discussions
 
-# --- Rotazione settimanale --------------------------------------------------
-# La card mostra sempre il PRIMO nickname di ogni lista, con l'avatar preso da
-# https://github.com/<nickname>.png e incorporato nell'SVG.
+# --- The people ---------------------------------------------------------------
+# The card shows the handle at the top of each queue, with the avatar pulled
+# from https://github.com/<handle>.png and embedded in the SVG.
 #
-# Le due liste NON si scrivono a mano: `sync.py` le allinea alle fonti reali
+# These lists are not written by hand: `sync.py` aligns them with the real
+# sources.
 #
-#   developers   ← membri pubblici dell'organizzazione
+#   developers   ← public members of the organization
 #                  https://github.com/orgs/openapi/people
-#   contributors ← registro dei contributor
+#   contributors ← the contributors registry
 #                  https://github.com/openapi/contributors
 #
-# Il sync preserva l'ordine: chi c'è già resta al suo posto, i nuovi entrano in
-# fondo alla coda, chi sparisce dalla fonte viene rimosso.
+# The sync preserves the order: whoever is already here keeps their position,
+# newcomers are appended to the bottom, and whoever disappears upstream is
+# dropped.
 #
-# `rotate.py` sposta il primo elemento in fondo alla lista, quindi ogni
-# settimana entra in scena il successivo e nessuno si ripete finché non è
-# passato tutto il giro. Per far uscire prima qualcuno, spostalo a mano in
-# testa.
-#
-#   python3 generator/sync.py     # allinea le liste alle fonti
-#   python3 generator/rotate.py   # avanza la settimana e ruota
-#
-# Nickname esclusi dalla rotazione anche se presenti nelle fonti upstream.
-# La card serve a dare visibilità a chi collabora con Openapi, non a chi la
-# pubblica: per questo l'autore del sistema si tiene fuori.
+# Handles excluded from the rotation even when the sources list them. The card
+# exists to give visibility to the people who work on and with Openapi, not to
+# the person publishing it, so the author of the system stays out of it.
 exclude:
   - francescobianco
-
 
 developers:
   - AlbertoVenanzoniAltravia

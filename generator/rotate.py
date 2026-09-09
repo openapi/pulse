@@ -1,42 +1,46 @@
 #!/usr/bin/env python3
 """
-Advance the Pulse Card by one week.
+Advance the queues by one edition.
 
     python3 generator/rotate.py [--dry-run]
 
-Bumps `week` in content/current.yml and rotates the `developers` and
-`contributors` lists: the nickname currently on the card moves to the tail, the
-next one takes its place. Everyone gets a turn before anyone repeats, and the
-running order stays visible and editable in the file itself — to feature
-someone sooner, move them to the top by hand.
+Bumps `week` in content/current.yml and moves the top entry of every queue —
+developers, contributors, apis — to the bottom, so the next one comes up and
+nobody repeats until the whole queue has had a turn.
 
-The file is edited line by line rather than reserialised, so comments and
-formatting survive.
+Run this *after* publishing, not before. The top of each queue is what goes out
+**next**, which is what makes curating it a single gesture: move an entry to the
+top and it is on the next card. That only holds if rotation happens once the
+current edition is already out.
+
+For the same reason this does not regenerate the SVGs. The card in public/ has
+to keep showing the edition that was published until the next one is built.
+
+The files are edited line by line rather than reserialised, so comments and
+hand-chosen ordering survive.
 """
 
 import re
-import subprocess
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-CONTENT = ROOT / "content" / "current.yml"
-LISTS = ("developers", "contributors")
-LAST_WEEK_OF_YEAR = 52
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from pools import item_key, read_block, replace_block  # noqa: E402
 
-ITEM = re.compile(r"^\s*-\s+\S")
+ROOT = Path(__file__).resolve().parent.parent
+CURRENT = ROOT / "content" / "current.yml"
+APIS = ROOT / "content" / "apis.yml"
+LAST_WEEK_OF_YEAR = 52
 
 
 def bump_week(lines):
     """Advance `week`, rolling over into the next year after week 52."""
     week = year = None
     for i, line in enumerate(lines):
-        match = re.match(r"^week:\s*(\d+)\s*$", line)
-        if match:
-            week = (i, int(match.group(1)))
-        match = re.match(r"^year:\s*(\d+)\s*$", line)
-        if match:
-            year = (i, int(match.group(1)))
+        if re.match(r"^week:\s*\d+\s*$", line):
+            week = (i, int(line.split(":")[1]))
+        elif re.match(r"^year:\s*\d+\s*$", line):
+            year = (i, int(line.split(":")[1]))
 
     if week is None:
         sys.exit("content/current.yml: no top-level `week:` key found")
@@ -52,52 +56,39 @@ def bump_week(lines):
     return value, new_value
 
 
-def rotate_list(lines, key):
-    """Move the first entry of `key` to the end of its block."""
-    try:
-        start = next(i for i, line in enumerate(lines)
-                     if re.match(rf"^{key}:\s*$", line))
-    except StopIteration:
-        sys.exit(f"content/current.yml: no top-level `{key}:` list found")
-
-    items = []
-    i = start + 1
-    while i < len(lines) and ITEM.match(lines[i]):
-        items.append(i)
-        i += 1
-
+def rotate(lines, key, field=None):
+    """Move the top entry of a queue to the bottom."""
+    start, end, items = read_block(lines, key)
     if len(items) < 2:
         print(f"  {key}: fewer than two entries, nothing to rotate")
-        return None, None
+        return False
 
-    first, rest = lines[items[0]], [lines[j] for j in items[1:]]
-    lines[items[0]:items[-1] + 1] = rest + [first]
-
-    outgoing = first.split("-", 1)[1].strip()
-    incoming = rest[0].split("-", 1)[1].strip()
-    return outgoing, incoming
+    outgoing, incoming = item_key(items[0], field), item_key(items[1], field)
+    replace_block(lines, start, end, items[1:] + [items[0]])
+    print(f"  {key}: {outgoing} → {incoming}")
+    return True
 
 
 def main():
     dry_run = "--dry-run" in sys.argv
-    lines = CONTENT.read_text(encoding="utf-8").splitlines()
 
-    old_week, new_week = bump_week(lines)
-    print(f"week {old_week} → {new_week}")
-    for key in LISTS:
-        outgoing, incoming = rotate_list(lines, key)
-        if incoming:
-            print(f"  {key}: @{outgoing} → @{incoming}")
+    current_lines = CURRENT.read_text(encoding="utf-8").splitlines()
+    api_lines = APIS.read_text(encoding="utf-8").splitlines()
+
+    old_week, new_week = bump_week(current_lines)
+    print(f"edition {old_week} → {new_week}")
+    rotate(current_lines, "developers")
+    rotate(current_lines, "contributors")
+    rotate(api_lines, "apis", field="slug")
 
     if dry_run:
-        print("\n--dry-run: content/current.yml left untouched")
+        print("\n--dry-run: nothing written")
         return
 
-    CONTENT.write_text("\n".join(lines) + "\n", encoding="utf-8")
-    print(f"\nupdated {CONTENT.relative_to(ROOT)}")
-
-    build = Path(__file__).resolve().parent / "build.py"
-    subprocess.run([sys.executable, str(build)], check=True)
+    CURRENT.write_text("\n".join(current_lines) + "\n", encoding="utf-8")
+    APIS.write_text("\n".join(api_lines) + "\n", encoding="utf-8")
+    print("\nupdated content/current.yml and content/apis.yml — "
+          "run generator/build.py at the start of the next edition")
 
 
 if __name__ == "__main__":

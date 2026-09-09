@@ -1,32 +1,41 @@
 # OpenAPI Pulse Card
 
-L’idea è introdurre in tutte le repository dell’organizzazione `@openapi` una piccola card editoriale comune, posizionata nella parte alta del README, con lo scopo di portare traffico dalle singole repository verso la community e le Discussions.
+The idea is to introduce a small, shared editorial card into every repository
+in the `@openapi` organization, placed near the top of the README, so that
+traffic flows from the individual repositories towards the community and the
+Discussions.
 
-La card deve funzionare come una sorta di **news ticker settimanale dell’ecosistema OpenAPI**, mostrando pochi contenuti editoriali selezionati da `pulse`, ad esempio:
+The card should work as a kind of **weekly news ticker for the OpenAPI
+ecosystem**, showing a few selected editorial items curated in `pulse`, such as:
 
 * API of the Week
 * Developer / Contributor of the Week
-* una Discussion rilevante
-* un insight dalla community
-* una challenge o call to action
+* a relevant Discussion
+* an insight from the community
+* a challenge or call to action
 
-L’obiettivo non è trasformare il README in una newsletter, ma creare un elemento visivo riconoscibile e identico su tutte le repository, capace di comunicare che dietro le singole librerie esiste una community attiva.
+The goal is not to turn the README into a newsletter, but to create a
+recognizable visual element, identical across every repository, that
+communicates that behind the individual libraries there is an active community.
 
-## Principio architetturale
+## Architectural principle
 
-Il contenuto deve essere centralizzato.
+The content has to be centralized.
 
-Non conviene fare un commit settimanale su tutti i README dell’organizzazione solo per aggiornare il contenuto editoriale. Ogni repository dovrebbe invece contenere una volta sola il riferimento alla Pulse Card.
+Committing to every README in the organization once a week just to update the
+editorial content is not worth it. Each repository should instead contain the
+reference to the Pulse Card once and only once.
 
-Esempio:
+For example:
 
 ```markdown
 [![OpenAPI Pulse](https://openapi.github.io/pulse/ticker.svg)](https://github.com/openapi/discussions)
 ```
 
-Da quel momento in poi tutte le modifiche settimanali avvengono esclusivamente dentro `openapi/pulse`.
+From that point on, every weekly change happens exclusively inside
+`openapi/pulse`.
 
-Architettura concettuale:
+The conceptual architecture:
 
 ```text
 openapi/pulse
@@ -39,14 +48,15 @@ openapi/pulse
              ├──────────────► repo-php / README
              ├──────────────► repo-rust / README
              ├──────────────► repo-js / README
-             └──────────────► tutte le altre repo
+             └──────────────► every other repository
 ```
 
-## Contenuto della card
+## What goes on the card
 
-La card dovrebbe essere piccola, leggibile e visivamente editoriale, non simile a un badge CI.
+The card should be small, readable and visually editorial — not something that
+looks like a CI badge.
 
-Indicativamente:
+Roughly:
 
 ```text
 ╭──────────────────────────────────────────────────────────────────────╮
@@ -55,17 +65,18 @@ Indicativamente:
 │ 🔌 API OF THE WEEK     👨‍💻 DEVELOPER       💬 COMMUNITY              │
 │ Open-Meteo             @foobar              Do agents need SDKs?     │
 │                                                                      │
-│                         JOIN THE DISCUSSION →                        │
+│                         JOIN THE COMMUNITY →                         │
 ╰──────────────────────────────────────────────────────────────────────╯
 ```
 
-Dimensioni indicative: circa 800–900 px di larghezza e 80–120 px di altezza.
+Indicative dimensions: around 800–900 px wide and 80–120 px tall.
 
-Deve essere abbastanza piccola da non rubare spazio al progetto, ma abbastanza riconoscibile da diventare un elemento ricorrente dell’identità OpenAPI.
+Small enough not to steal space from the project, but recognizable enough to
+become a recurring element of the OpenAPI identity.
 
-## Posizione nel README
+## Placement in the README
 
-La posizione ideale è subito dopo titolo/logo e badge principali:
+The ideal position is right after the title/logo and the main badges:
 
 ```markdown
 # OpenAPI Python Client
@@ -77,15 +88,17 @@ La posizione ideale è subito dopo titolo/logo e badge principali:
 A fully-featured Python API client...
 ```
 
-In alternativa può stare persino sopra i badge, se si vuole darle maggiore peso editoriale.
+It can even sit above the badges, if it should carry more editorial weight.
 
-## Un’unica CTA
+## A single CTA
 
-La card non deve cercare di contenere troppi link.
+The card should not try to hold too many links.
 
-Un SVG inserito nel README funziona meglio se l’intera immagine è cliccabile verso una sola destinazione.
+An SVG embedded in a README works better when the entire image is clickable
+towards a single destination.
 
-La destinazione ideale è la Discussion principale della settimana oppure la homepage delle Organization Discussions:
+The ideal destination is the main discussion of the week, or the homepage of
+the organization Discussions:
 
 ```text
 README
@@ -99,17 +112,17 @@ reaction / vote / comment
 community
 ```
 
-Quindi la card può mostrare più contenuti, ma deve avere una CTA unica come:
+So the card can show several items, but it must have one single CTA, such as:
 
 ```text
 JOIN THE COMMUNITY →
 ```
 
-## Relazione con Pulse
+## Relationship with Pulse
 
-`pulse` deve essere il motore editoriale.
+`pulse` should be the editorial engine.
 
-La repository potrebbe contenere qualcosa del genere:
+The repository could contain something along these lines:
 
 ```text
 openapi/pulse
@@ -127,7 +140,7 @@ openapi/pulse
     └── publish-pulse.yml
 ```
 
-Un possibile `current.yml`:
+A possible `current.yml`:
 
 ```yaml
 week: 37
@@ -147,18 +160,18 @@ cta:
   text: Join the community
 ```
 
-Una GitHub Action può rigenerare automaticamente gli SVG ogni settimana.
+A GitHub Action can regenerate the SVGs automatically every week.
 
-## Light e dark mode
+## Light and dark mode
 
-La soluzione migliore è produrre due versioni:
+The best approach is to produce two versions:
 
 ```text
 ticker.svg
 ticker-dark.svg
 ```
 
-e inserirle nel README tramite `<picture>`:
+and embed them in the README through `<picture>`:
 
 ```html
 <p align="center">
@@ -178,64 +191,67 @@ e inserirle nel README tramite `<picture>`:
 </p>
 ```
 
-Questo permette alla card di integrarsi bene sia nel tema chiaro sia nel tema scuro di GitHub.
+This lets the card sit well in both the light and the dark GitHub themes.
 
 ## Hosting
 
-Una soluzione semplice e coerente con il progetto è usare GitHub Pages:
+A simple solution, coherent with the project, is GitHub Pages:
 
 ```text
 https://openapi.github.io/pulse/ticker.svg
 ```
 
-In alternativa può essere esposto un endpoint dedicato:
+Alternatively a dedicated endpoint could be exposed:
 
 ```text
 https://pulse.openapi.com/ticker.svg
 ```
 
-Il vantaggio dell’endpoint è avere maggiore controllo su cache e distribuzione.
+The advantage of an endpoint is more control over caching and distribution.
 
 ## Cache
 
-Le immagini nei README GitHub possono essere servite attraverso sistemi di caching/proxy.
+Images in GitHub READMEs can be served through caching/proxy systems.
 
-Poiché la Pulse Card cambia settimanalmente, questo non è un problema critico, ma l’infrastruttura dovrebbe comunque essere progettata pensando agli aggiornamenti.
+Since the Pulse Card changes weekly this is not a critical problem, but the
+infrastructure should still be designed with updates in mind.
 
-Possibili strategie:
+Possible strategies:
 
-1. URL fisso:
+1. A fixed URL:
 
 ```text
 /ticker.svg
 ```
 
-con opportuni header di cache.
+with appropriate cache headers.
 
-2. URL versionato:
+2. A versioned URL:
 
 ```text
 /pulse-2026-w37.svg
 ```
 
-ma in questo caso sarebbe necessario modificare periodicamente i README.
+but in that case the READMEs would need to be changed periodically.
 
-Per questo è preferibile mantenere un URL stabile e aggiornare centralmente il contenuto.
+That is why it is preferable to keep a stable URL and update the content
+centrally.
 
-## Cosa evitare
+## What to avoid
 
-Non userei Shields.io come soluzione principale.
+I would not use Shields.io as the main solution.
 
-Badge come:
+Badges like:
 
 ```text
 API of the week | Open-Meteo
 Developer       | @foobar
 ```
 
-sono tecnicamente semplici ma sembrano indicatori CI e perdono il carattere editoriale del progetto.
+are technically simple but look like CI indicators, and lose the editorial
+character of the project.
 
-Shields è perfetto per:
+Shields is perfect for:
 
 ```text
 build | passing
@@ -243,19 +259,19 @@ coverage | 92%
 version | 3.2
 ```
 
-La Pulse Card invece deve comunicare:
+The Pulse Card instead has to communicate:
 
 ```text
-questa settimana nella community OpenAPI...
+this week in the OpenAPI community...
 ```
 
-Deve quindi avere una propria identità visuale.
+So it needs a visual identity of its own.
 
-## Ruolo strategico
+## Strategic role
 
-La Pulse Card non è soltanto decorazione.
+The Pulse Card is not just decoration.
 
-Le repository SDK normalmente hanno un comportamento molto transazionale:
+SDK repositories normally have very transactional behaviour:
 
 ```text
 developer
@@ -269,7 +285,7 @@ use API
 leave
 ```
 
-La card introduce un nuovo percorso:
+The card introduces a new path:
 
 ```text
 developer
@@ -287,31 +303,32 @@ community
 contributor
 ```
 
-Ogni repository diventa quindi un punto di acquisizione verso la community.
+Every repository therefore becomes an acquisition point towards the community.
 
-Più repository esistono nell’organizzazione, più cresce la superficie di distribuzione del Pulse.
+The more repositories exist in the organization, the larger the distribution
+surface of the Pulse becomes.
 
-## Feedback loop editoriale
+## Editorial feedback loop
 
-Nel tempo la community stessa deve alimentare la Pulse Card.
+Over time the community itself should feed the Pulse Card.
 
-Esempio:
+For example:
 
 ```text
 Discussion
    ↓
-utente mostra un progetto
+a user shows a project
    ↓
 Project / Developer of the Week
    ↓
 Pulse Card
    ↓
-visibilità in tutte le repository
+visibility across every repository
    ↓
-nuovi utenti entrano nella Discussion
+new users enter the Discussion
 ```
 
-Si crea così un ciclo:
+Which creates a cycle:
 
 ```text
 Publish
@@ -327,28 +344,34 @@ Publish
 
 ## Naming
 
-Il componente può avere un nome riconoscibile e diventare parte del branding dell’organizzazione:
+The component can have a recognizable name and become part of the branding of
+the organization:
 
 **OpenAPI Pulse Card**
 
-oppure:
+or:
 
 **OpenAPI Pulse Ticker**
 
-`Pulse` rimane il motore editoriale, mentre la Pulse Card è il componente distribuito nei README.
+`Pulse` remains the editorial engine, while the Pulse Card is the component
+distributed across the READMEs.
 
-## Obiettivo finale
+## Final goal
 
-Ogni repository OpenAPI deve comunicare implicitamente due cose:
+Every OpenAPI repository should implicitly communicate two things:
 
 ```text
-questa libreria è mantenuta
+this library is maintained
 
-e
+and
 
-questa libreria appartiene a una community viva
+this library belongs to a living community
 ```
 
-La Pulse Card è il ponte tra le repository tecniche e `openapi/discussions`.
+The Pulse Card is the bridge between the technical repositories and
+`openapi/discussions`.
 
-L’obiettivo è quindi trasformare tutte le repository dell’organizzazione in una rete di ingressi verso un unico spazio di community, senza generare commit editoriali settimanali su ciascuna repo e mantenendo tutto il contenuto sotto il controllo centrale di `openapi/pulse`.
+The goal is therefore to turn every repository in the organization into a
+network of entry points towards a single community space, without generating
+weekly editorial commits in each repo, and keeping all the content under the
+central control of `openapi/pulse`.

@@ -1,0 +1,97 @@
+# OpenAPI Pulse — the API rotation queue.
+#
+# The API at the TOP of this list is the one going out in the next edition.
+# To choose it, move its entry to the top; publishing moves it to the bottom,
+# so the queue keeps turning on its own once you stop curating it.
+#
+# `sync.py` refreshes this list from the public API library
+#   https://console.openapi.com/apis
+# It preserves the order you set: APIs already here keep their position, ones
+# newly published by Openapi are appended to the bottom, and ones that
+# disappear from the library are dropped.
+
+apis:
+  - slug: oauthv2
+    name: Oauth V2
+    url: https://console.openapi.com/apis/oauthv2/info
+  - slug: ai
+    name: AI
+    url: https://console.openapi.com/apis/ai/info
+  - slug: automotive
+    name: Automotive
+    url: https://console.openapi.com/apis/automotive/info
+  - slug: company
+    name: Company
+    url: https://console.openapi.com/apis/company/info
+  - slug: esignature
+    name: eSignature
+    url: https://console.openapi.com/apis/esignature/info
+  - slug: exchange
+    name: Exchange Rate
+    url: https://console.openapi.com/apis/exchange/info
+  - slug: geocoding
+    name: Geocoding
+    url: https://console.openapi.com/apis/geocoding/info
+  - slug: invoice
+    name: Invoice
+    url: https://console.openapi.com/apis/invoice/info
+  - slug: marchetemporali
+    name: Time Stamping
+    url: https://console.openapi.com/apis/marchetemporali/info
+  - slug: realestate
+    name: Real Estate
+    url: https://console.openapi.com/apis/realestate/info
+  - slug: risk
+    name: Risk
+    url: https://console.openapi.com/apis/risk/info
+  - slug: smsv2
+    name: SMS v2
+    url: https://console.openapi.com/apis/smsv2/info
+  - slug: trust
+    name: Trust
+    url: https://console.openapi.com/apis/trust/info
+  - slug: ufficiopostale
+    name: Postal Service
+    url: https://console.openapi.com/apis/ufficiopostale/info
+  - slug: cap
+    name: Zip Codes
+    url: https://console.openapi.com/apis/cap/info
+  - slug: catasto
+    name: Italian cadastre
+    url: https://console.openapi.com/apis/catasto/info
+  - slug: docuengine
+    name: DocuEngine
+    url: https://console.openapi.com/apis/docuengine/info
+  - slug: visure-camerali
+    name: Chamber of Commerce Company Registrations
+    url: https://console.openapi.com/apis/visure-camerali/info
+  - slug: pecmassiva
+    name: Massive REM
+    url: https://console.openapi.com/apis/pecmassiva/info
+  - slug: pec
+    name: Italian certified e-mail
+    url: https://console.openapi.com/apis/pec/info
+  - slug: sdi
+    name: SDI Electronic Invoicing
+    url: https://console.openapi.com/apis/sdi/info
+  - slug: bollettini
+    name: Paying Bills
+    url: https://console.openapi.com/apis/bollettini/info
+  - slug: domains
+    name: .it Domains
+    url: https://console.openapi.com/apis/domains/info
+  - slug: pdf
+    name: PDF
+    url: https://console.openapi.com/apis/pdf/info
+  - slug: oauth
+    name: Oauth
+    url: https://console.openapi.com/apis/oauth/info
+  - slug: sms
+    name: SMS v1
+    url: https://console.openapi.com/apis/sms/info
+  - slug: visengine
+    name: Visengine
+    url: https://console.openapi.com/apis/visengine/info
+  - slug: firma
+    name: Digital Signature
+    url: https://console.openapi.com/apis/firma/info

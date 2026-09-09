@@ -96,14 +96,16 @@ and the **Contributor of the week** — both with their GitHub avatar — and th
 ### How it works
 
 The content lives in exactly one place. Repositories embed a stable URL and
-never need an editorial commit again — the weekly update happens only here.
+never need an editorial commit again — the update happens only here.
 
 ```text
-content/current.yml          ← the only file edited each week
+content/current.yml          ← the week, the CTA, the people queues
+content/apis.yml             ← the API queue
         │
-generator/sync.py            ← pulls the people from GitHub
-generator/rotate.py          ← advances the week, rotates the people
+generator/sync.py            ← refreshes the queues from their sources
 generator/build.py           ← renders both themes, embeds the avatars
+generator/publish.py         ← posts the edition to Discussions
+generator/rotate.py          ← advances the queues for the next edition
         │
 public/ticker.svg
 public/ticker-dark.svg
@@ -113,6 +115,11 @@ public/ticker-dark.svg
         ├──────────────► openapi/<repo-js>     / README
         └──────────────► every other repository
 ```
+
+`.github/workflows/pulse.yml` runs the whole cycle on a schedule and commits
+the result back. **Daily for now**, deliberately — the cadence is short so the
+loop can be watched working day after day before it is trusted with a weekly
+rhythm. Switching to weekly is one line in the cron.
 
 ### Embedding it in a repository
 
@@ -137,73 +144,91 @@ The `<picture>` element gives the card a light and a dark variant so it sits
 naturally in both GitHub themes. The whole image is one link, with one
 destination — the card carries several stories but never competes with itself.
 
-### The people, and how they rotate
+### The queues
 
-The two people on the card are not hand-picked each week. They come from the
-places where the ecosystem already records who is involved:
+Three ordered queues decide what goes on the card. **The entry at the top of
+each one is what goes out next**, which makes curating them a single gesture:
+move a line to the top and it is on the next card. Publishing moves it to the
+bottom, so the queues keep turning on their own once you stop curating them.
 
-```text
-https://github.com/orgs/openapi/people      → developers
-https://github.com/openapi/contributors     → contributors
-```
+| Queue | File | Source |
+| --- | --- | --- |
+| `developers` | `content/current.yml` | [organization members](https://github.com/orgs/openapi/people) |
+| `contributors` | `content/current.yml` | [contributors registry](https://github.com/openapi/contributors) |
+| `apis` | `content/apis.yml` | [API library](https://console.openapi.com/apis) |
 
-`sync.py` reads both and merges them into the pools in `current.yml`:
+`sync.py` aligns all three with those sources:
 
 ```bash
-python3 generator/sync.py            # align the pools with the sources
+python3 generator/sync.py            # align the queues
 python3 generator/sync.py --dry-run  # preview the changes
 ```
 
 Membership belongs upstream; the **running order** belongs here. So the sync
-merges rather than overwrites — people already in a pool keep their position,
-newcomers are appended to the tail so they queue behind everyone already
-waiting instead of jumping the line, and anyone no longer listed upstream is
-dropped.
+merges rather than overwrites — entries already in a queue keep their position,
+newcomers are appended to the bottom so they queue behind everything already
+waiting instead of jumping the line, and anything no longer listed upstream is
+dropped. It never decides what goes out next.
 
-The card always features the **head** of each list. Rotating moves each head to
-the tail, so the next name steps forward and nobody repeats until the whole
-pool has had a turn:
+The API library has no public JSON feed, so `sync.py` reads the server-rendered
+listing and keys on the `apiBox` markup. If that page is ever restructured the
+sync fails loudly rather than writing an empty queue.
 
-```bash
-python3 generator/rotate.py            # bump the week, rotate, regenerate
-python3 generator/rotate.py --dry-run  # preview who is up next
-```
-
-```text
-week 37 → 38
-  developers: @AlbertoVenanzoniAltravia → @cipriani1194
-  contributors: @Deadpool2000 → @Seraphim200001
-```
-
-The order stays plain text and hand-editable: to feature someone sooner, move
-them to the top. `rotate.py` edits the file line by line, so comments and
-hand-ordering survive. After week 52 it rolls over into week 1 of the next
-year.
-
-Anyone under `exclude` is filtered out of both pools no matter what the sources
-say. The card exists to give visibility to the people who work on and with
-Openapi, not to the person publishing it, so the author of the system stays
-out of his own rotation:
+Anyone under `exclude` is filtered out of the people queues no matter what the
+sources say. The card exists to give visibility to the people who work on and
+with Openapi, not to the person publishing it, so the author of the system
+stays out of his own rotation:
 
 ```yaml
 exclude:
   - francescobianco
 ```
 
-The full cycle, once a week:
+### The cycle
 
 ```bash
-python3 generator/sync.py     # who is in
-python3 generator/rotate.py   # whose turn it is (regenerates the SVGs)
+python3 generator/sync.py      # refresh the queues from their sources
+python3 generator/build.py     # render the card for the top of each queue
+python3 generator/publish.py   # post the edition to Discussions
+python3 generator/rotate.py    # advance the queues for the next one
 ```
 
-To change the other tracks — the API, the discussion, the CTA — edit
-`current.yml` and run the generator on its own:
+The order is not arbitrary. The card is built and committed **before** the post
+goes out, so the discussion can link the SVG at an immutable commit and keep
+showing the card it was published with instead of silently updating to a later
+edition. The queues are rotated **after**, which is what keeps the top of each
+file meaning "next". And because rotation comes last, a failed publish leaves
+the edition intact to be retried rather than silently skipped.
 
-```bash
-$EDITOR content/current.yml
-python3 generator/build.py
-```
+For the same reason `rotate.py` does not regenerate the SVGs: the card in
+`public/` has to keep showing the published edition until the next one is
+built.
+
+### Publishing to Discussions
+
+`publish.py` renders `templates/discussion.md` and opens one post per edition
+in the **Openapi Pulse** category of
+[openapi/discussions](https://github.com/openapi/discussions).
+
+Two things GitHub does not let a script do, both worked around:
+
+* **Discussion categories cannot be created through the API.** There is no
+  `createDiscussionCategory` mutation and no REST endpoint. The category has to
+  be created once by hand at
+  [discussions/categories](https://github.com/openapi/discussions/discussions/categories).
+  `publish.py` looks it up by name and stops with instructions if it is
+  missing, rather than quietly posting somewhere else.
+* **Discussions cannot be pinned through the API.**
+  `Repository.pinnedDiscussions` is readable, but no mutation writes it. So
+  instead of pinning every new edition, one permanent discussion is pinned by
+  hand — once, forever — and its number recorded as `discussions.index` in
+  `current.yml`. `publish.py` rewrites that post's body every edition, so the
+  pinned entry always points at the latest one.
+
+The workflow needs a `PULSE_DISCUSSIONS_TOKEN` secret. The discussions live in
+`openapi/discussions`, a different repository from this one, and a workflow's
+built-in `GITHUB_TOKEN` is scoped to its own repository — so a PAT with write
+access to the discussions repository is required.
 
 ### Design notes
 
@@ -235,10 +260,12 @@ python3 generator/build.py
 * Hosting: `raw.githubusercontent.com` works today; GitHub Pages
   (`openapi.github.io/pulse/ticker.svg`) or a dedicated endpoint would give
   proper control over cache headers.
-* A `publish-pulse.yml` workflow to run `sync.py` + `rotate.py` and commit the
-  SVGs weekly.
-* The contributors pool is currently two people, so it cycles every two weeks.
-  It widens on its own as `openapi/contributors` grows.
+* Move the schedule from daily to weekly once the loop has been watched
+  running end to end.
+* The contributors queue is currently two people, so it turns over every two
+  editions. It widens on its own as `openapi/contributors` grows.
+* The `week` counter is a plain increment, not the real ISO week — while the
+  cadence is daily the two cannot agree, and it rolls over from 52 to 1.
 
 See [CARD.md](CARD.md) for the full rationale behind the component.
 
