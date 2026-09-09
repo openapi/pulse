@@ -55,13 +55,12 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          EDITION=$(python -c "import sys; sys.path.insert(0, 'generator'); from build import load_content; print(load_content()['week'])")
           if git diff --quiet -- content public; then
-            echo "nothing changed"
+            echo "nothing to commit; publishing edition $EDITION from the current tree"
           else
             git add content public
-            git commit -m "pulse: card for edition $(python -c "
-          import sys; sys.path.insert(0, 'generator')
-          from build import load_content; print(load_content()['week'])")"
+            git commit -m "pulse: card for edition $EDITION"
             git push
           fi
 
@@ -82,5 +81,5 @@ jobs:
         run: |
           python generator/rotate.py
           git add content
-          git commit -m "pulse: advance the queues"
+          git diff --cached --quiet || git commit -m "pulse: advance the queues"
           git push
