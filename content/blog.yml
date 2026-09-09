@@ -1,0 +1,115 @@
+# Openapi Pulse — the blog relay queues.
+#
+# The Openapi blog (https://openapi.com/blog) is where the ecosystem already
+# publishes editorial content. Every edition of the Pulse relays the entry at
+# the TOP of each queue below into Discussions, as a short extract that links
+# back to the full article:
+#
+#   news      ← blog category "News"          → discussions "Announcements"
+#   insights  ← blog category "API Insights"  → discussions "API Engineering"
+#
+# Unlike the people, API and topic queues, these do not rotate: an article is
+# relayed once and never again. `publish.py` moves what it posted into
+# `relayed:` below, and `sync.py` never puts a relayed slug back — so the
+# retirement is recorded by whatever actually published it, and a failed
+# publish leaves the entry at the top to be retried on the next edition.
+#
+# The order is the blog's own: newest first, because for news freshness is the
+# running order. `sync.py` rewrites both queues from the first two listing
+# pages, so an article that ages off the front of the blog before it was ever
+# relayed is dropped — by then it is not news any more.
+#
+# These files are edited as text, never reserialised, so the values are plain
+# and single-line. Titles routinely contain a colon; the reader splits on the
+# first one, so that survives.
+
+news:
+  - slug: pec-api-more-control-flexibility-and-new-management-possibilities
+    date: 2026-09-04
+    title: PEC API: more control, flexibility and new management possibilities
+    url: https://openapi.com/blog/pec-api-more-control-flexibility-and-new-management-possibilities
+    image: https://openapi.com/assets/content/en/news/images/cover/copertine74.png
+    excerpt: Openapi expands the PEC API’s features with new options to customize services, manage multiple users, and increase available storage space directly via API.
+  - slug: openapi-launches-the-new-advanced-electronic-signature-with-otp-api
+    date: 2026-09-01
+    title: Openapi launches the new Advanced Electronic Signature with OTP API
+    url: https://openapi.com/blog/openapi-launches-the-new-advanced-electronic-signature-with-otp-api
+    image: https://openapi.com/assets/content/en/news/images/cover/copertine61.png
+    excerpt: Integrate Advanced Electronic Signatures directly into your systems and simplify signing processes with secure identification and OTP authentication.
+  - slug: openapi-launches-new-verification-payee-api
+    date: 2026-08-12
+    title: Verify the payee before payment: Openapi launches the new Verification of Payee API
+    url: https://openapi.com/blog/openapi-launches-new-verification-payee-api
+    image: https://openapi.com/assets/content/en/news/images/cover/blog-vopedited1.png
+    excerpt: Block payment fraud in real time with open banking verification.
+
+insights:
+  - slug: bank-transfer-beneficiary-verification-vop-what-it-is-and-how-it-works
+    date: 2026-09-01
+    title: Bank Transfer Beneficiary Verification (VoP): what it is and how it works
+    url: https://openapi.com/blog/bank-transfer-beneficiary-verification-vop-what-it-is-and-how-it-works
+    image: https://openapi.com/assets/content/en/news/images/cover/copertine512.png
+    excerpt: Verification of Payee: how the automatic verification of IBAN and beneficiary works for SEPA instant transfers
+  - slug: omi-quotations-what-they-are-and-how-they-work
+    date: 2026-08-26
+    title: OMI Quotations: What They Are and How They Work
+    url: https://openapi.com/blog/omi-quotations-what-they-are-and-how-they-work
+    image: https://openapi.com/assets/content/en/news/images/cover/copertine329.png
+    excerpt: How to read official Revenue Agency data to evaluate apartments and rental properties throughout Italy
+  - slug: understanding-authentication-2fa-mfa-and-biometric-security
+    date: 2026-08-06
+    title: Understanding Authentication: 2FA, MFA and Biometric Security
+    url: https://openapi.com/blog/understanding-authentication-2fa-mfa-and-biometric-security
+    image: https://openapi.com/assets/content/en/news/images/cover/copertine121.png
+    excerpt: A guide to 2FA, MFA and biometrics: how to protect online accounts while balancing security and user experience
+  - slug: cadastral-monitoring-what-it-is-and-when-to-automate-it
+    date: 2026-08-03
+    title: Cadastral Monitoring: What It Is and When to Automate It
+    url: https://openapi.com/blog/cadastral-monitoring-what-it-is-and-when-to-automate-it
+    image: https://openapi.com/assets/content/en/news/images/cover/copertine213fdsfadsfs.png
+    excerpt: A guide to the alert system that tracks property changes, liens, and cadastral values without the need for manual property searches.
+  - slug: split-payment-extended
+    date: 2026-07-29
+    title: Split payment extended until 2029: no changes from 1 July 2026
+    url: https://openapi.com/blog/split-payment-extended
+    image: https://openapi.com/assets/content/en/news/images/cover/copertine58.png
+    excerpt: The EU Council extends the split payment mechanism until 2029: no changes for invoices issued to public administrations and public entities.
+  - slug: transactional-sms-what-are-they-and-what-are-they-used-for
+    date: 2026-07-16
+    title: Transactional SMS: What Are They and What Are They Used For?
+    url: https://openapi.com/blog/transactional-sms-what-are-they-and-what-are-they-used-for
+    image: https://openapi.com/assets/content/en/news/images/cover/copertine54.png
+    excerpt: A Practical Guide to Transactional SMS: GDPR Compliance, Operational Benefits, and API Integration
+  - slug: iban-what-it-is-and-how-to-verify-it
+    date: 2026-07-08
+    title: IBAN: What It Is and How to Verify It
+    url: https://openapi.com/blog/iban-what-it-is-and-how-to-verify-it
+    image: https://openapi.com/assets/content/en/news/images/cover/copertine413.png
+    excerpt: International Bank Account Number: when to verify a bank account's IBAN and how to do it
+  - slug: electronic-invoicing-in-france-how-it-works-and-what-changes-from-september-1
+    date: 2026-06-30
+    title: Electronic Invoicing in France: How It Works and What Changes from September 1
+    url: https://openapi.com/blog/electronic-invoicing-in-france-how-it-works-and-what-changes-from-september-1
+    image: https://openapi.com/assets/content/en/news/images/cover/copertine323.png
+    excerpt: A Guide to Electronic Invoicing in France: How It Works, the Formats, and the Upcoming Deadlines
+  - slug: 2-way-sms-what-it-is-and-how-it-works
+    date: 2026-06-17
+    title: 2-Way SMS: What It Is and How It Works
+    url: https://openapi.com/blog/2-way-sms-what-it-is-and-how-it-works
+    image: https://openapi.com/assets/content/en/news/images/cover/copertine152.png
+    excerpt: Inbound vs Outbound: How Two-Way SMS Works and Why to Use It
+  - slug: openapi-skills-the-new-github-repository-dedicated-to-ai-agent-capabilities
+    date: 2026-06-15
+    title: Openapi Skills: The New GitHub Repository Dedicated to AI Agent Capabilities
+    url: https://openapi.com/blog/openapi-skills-the-new-github-repository-dedicated-to-ai-agent-capabilities
+    image: https://openapi.com/assets/content/en/news/images/cover/copertine114.png
+    excerpt: A Resource Hub for Developers, Automation, and Artificial Intelligence
+  - slug: how-electronic-invoicing-works-in-germany
+    date: 2026-06-11
+    title: How Electronic Invoicing Works in Germany
+    url: https://openapi.com/blog/how-electronic-invoicing-works-in-germany
+    image: https://openapi.com/assets/content/en/news/images/cover/invoicing.png
+    excerpt: Mandatory B2B E-Invoicing in Germany: A Practical Guide to Issuing and Transmitting Electronic Invoices
+
+# Slugs already relayed to Discussions. Nothing here is ever posted again.
+relayed:

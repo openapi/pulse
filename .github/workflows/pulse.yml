@@ -69,7 +69,7 @@ jobs:
             git push
           fi
 
-      - name: Publish the edition to Discussions
+      - name: Publish the edition and relay the blog
         env:
           # The discussions live in openapi/discussions, a different repository
           # from this one, so the workflow's built-in GITHUB_TOKEN cannot write

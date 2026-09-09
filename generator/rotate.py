@@ -16,6 +16,10 @@ current edition is already out.
 For the same reason this does not regenerate the SVGs. The card in public/ has
 to keep showing the edition that was published until the next one is built.
 
+The blog queues in content/blog.yml are not touched here at all: they do not
+rotate. An article is relayed once, so publish.py retires what it actually
+posted — see the blog relay in the README.
+
 The files are edited line by line rather than reserialised, so comments and
 hand-chosen ordering survive.
 """

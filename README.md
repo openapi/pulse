@@ -102,6 +102,7 @@ never need an editorial commit again — the update happens only here.
 content/current.yml          ← the edition number, the CTA, the people queues
 content/apis.yml             ← the API queue
 content/topics.yml           ← the discussion queue
+content/blog.yml             ← the blog relay queues
         │
 generator/sync.py            ← refreshes the queues from their sources
 generator/build.py           ← renders both themes, embeds the avatars
@@ -147,7 +148,8 @@ destination — the card carries several stories but never competes with itself.
 
 ### The queues
 
-Four ordered queues decide what goes on the card. **The entry at the top of
+Ordered queues decide what goes out. The first four are what the card shows;
+the last two are the blog relay described below. **The entry at the top of
 each one is what goes out next**, which makes curating them a single gesture:
 move a line to the top and it is on the next card. Publishing moves it to the
 bottom, so the queues keep turning on their own once you stop curating them.
@@ -158,8 +160,9 @@ bottom, so the queues keep turning on their own once you stop curating them.
 | `contributors` | `content/current.yml` | [contributors registry](https://github.com/openapi/contributors) |
 | `apis` | `content/apis.yml` | [API library](https://console.openapi.com/apis) |
 | `topics` | `content/topics.yml` | [open discussions](https://github.com/openapi/discussions) |
+| `news` · `insights` | `content/blog.yml` | [the Openapi blog](https://openapi.com/blog) |
 
-`sync.py` aligns all four with those sources:
+`sync.py` aligns all of them with those sources:
 
 ```bash
 python3 generator/sync.py            # align the queues
@@ -197,7 +200,7 @@ exclude:
 ```bash
 python3 generator/sync.py      # refresh the queues from their sources
 python3 generator/build.py     # render the card for the top of each queue
-python3 generator/publish.py   # post the edition to Discussions
+python3 generator/publish.py   # post the edition, and relay the blog
 python3 generator/rotate.py    # advance the queues for the next one
 ```
 
@@ -216,7 +219,9 @@ built.
 
 `publish.py` renders `templates/discussion.md` and opens one post per edition
 in the **Openapi Pulse** category of
-[openapi/discussions](https://github.com/openapi/discussions).
+[openapi/discussions](https://github.com/openapi/discussions). It then relays
+the blog into two further categories — see
+[the blog relay](#the-blog-relay).
 
 Two things GitHub does not let a script do, both worked around:
 
@@ -237,6 +242,51 @@ The workflow needs a `PULSE_DISCUSSIONS_TOKEN` secret. The discussions live in
 `openapi/discussions`, a different repository from this one, and a workflow's
 built-in `GITHUB_TOKEN` is scoped to its own repository — so a PAT with write
 access to the discussions repository is required.
+
+### The blog relay
+
+The [Openapi blog](https://openapi.com/blog) is where the ecosystem already
+publishes editorial content, and Discussions is where the community reads it.
+Every edition carries one article from each of two blog categories into a
+category of its own:
+
+| On the blog | In [openapi/discussions](https://github.com/openapi/discussions) |
+| --- | --- |
+| News | Announcements |
+| API Insights | API Engineering |
+
+What goes out is an **extract**, never a copy: the cover, the blog's own
+summary, and a link back to the full piece. The article stays where it was
+written; Discussions gets the pointer and the conversation.
+
+The blog has no feed — no RSS, no JSON, the pages are server-rendered — so
+`generator/blog.py` reads the listing markup, keying on the category badge and
+the card heading. As with the API library, a restructured page yields nothing
+and the sync stops loudly rather than emptying a queue.
+
+These two queues behave differently from the other four, and the difference is
+the point:
+
+* **They do not rotate.** An article is relayed once. `publish.py` moves what
+  it posted into `relayed:` at the bottom of `content/blog.yml`, and `sync.py`
+  never puts a relayed slug back.
+* **They are not curated.** The blog decides the order — newest first, because
+  for news freshness *is* the running order. An article that ages off the front
+  of the blog before its turn is dropped; by then it is not news any more.
+* **Retirement happens in `publish.py`, not `rotate.py`.** Rotation is for
+  queues that turn; this is a removal, and it belongs to whatever actually
+  managed to post. A relay that fails leaves its article at the top of the
+  queue for the next edition instead of burning it.
+
+The relay is deliberately the softer half of the edition. If a category does
+not exist yet, or the blog cannot be reached, the run says so and the edition
+itself still goes out — the two are separate events that happen to share a
+schedule. Like every other discussion category, **Announcements** and **API
+Engineering** have to be created by hand once, at
+[discussions/categories](https://github.com/openapi/discussions/discussions/categories).
+
+Both of them are also excluded from the card's topic queue: they hold what this
+system writes, and the card spotlights conversations, not broadcasts.
 
 ### Design notes
 

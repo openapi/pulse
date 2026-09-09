@@ -9,12 +9,12 @@
 #
 #   python3 generator/sync.py      # refresh the queues from their sources
 #   python3 generator/build.py     # render the card for the top of each queue
-#   python3 generator/publish.py   # post the edition to Discussions
+#   python3 generator/publish.py   # post the edition, and relay the blog
 #   python3 generator/rotate.py    # advance the queues for the next one
 #
-# The APIs and the discussion topics live in their own files, content/apis.yml
-# and content/topics.yml, because each of their entries is a record rather than
-# a bare handle.
+# The APIs, the discussion topics and the blog relay live in their own files —
+# content/apis.yml, content/topics.yml and content/blog.yml — because each of
+# their entries is a record rather than a bare handle.
 
 week: 40
 year: 2026
@@ -40,6 +40,20 @@ discussions:
   repo: openapi/discussions
   category: Openapi Pulse
   index: 3
+
+# --- The blog relay -----------------------------------------------------------
+# Every edition also relays the Openapi blog into Discussions: the top of each
+# queue in content/blog.yml goes out as a short extract linking back to the
+# full article. The mapping below is blog queue → discussions category.
+#
+# Those categories, like the one above, cannot be created through the API. They
+# have to exist by hand in the discussions repository; if one is missing the
+# relay says so and the edition itself still goes out.
+blog:
+  url: https://openapi.com/blog
+  relay:
+    news: Announcements
+    insights: API Engineering
 
 # --- The people ---------------------------------------------------------------
 # The card shows the handle at the top of each queue, with the avatar pulled

@@ -23,6 +23,13 @@ Two things GitHub does not let a script do, both worked around here:
 The card images are linked at the commit that produced them, not at `main`, so
 an old edition keeps showing the card it was published with instead of silently
 updating to today's.
+
+Every edition also relays the Openapi blog: the article at the top of each
+queue in content/blog.yml is posted as a short extract linking back to the full
+piece — News into Announcements, API Insights into API Engineering. That relay
+happens once per article, so what goes out is retired here rather than by
+rotate.py: a failed relay leaves the entry at the top of its queue to be
+retried on the next edition.
 """
 
 import json
@@ -35,9 +42,16 @@ from urllib.request import Request, urlopen
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build import featured, featured_api, featured_topic, load_content  # noqa: E402
+from blog import BADGES, FIELDS as BLOG_FIELDS  # noqa: E402
+from pools import item_key, read_block, replace_block  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 TEMPLATE = ROOT / "templates" / "discussion.md"
+RELAY_TEMPLATE = ROOT / "templates" / "blog-relay.md"
+BLOG = ROOT / "content" / "blog.yml"
+
+# queue → the blog category it comes from, for the credit line on the post.
+BADGE_NAMES = {queue: badge for badge, queue in BADGES.items()}
 GRAPHQL = "https://api.github.com/graphql"
 RAW = "https://raw.githubusercontent.com/openapi/pulse"
 
@@ -129,7 +143,13 @@ mutation($id: ID!, $body: String!) {
 """
 
 
-def resolve_category(owner, name, wanted):
+def resolve_category(owner, name, wanted, required=True):
+    """The repository id and the id of the category named `wanted`.
+
+    With `required=False` a missing category comes back as None instead of
+    stopping the run: the blog relay is an extra, and one missing category
+    there must not take the edition itself down with it.
+    """
     data = graphql(REPO_QUERY, {"owner": owner, "name": name})["repository"]
     if data is None:
         sys.exit(f"repository {owner}/{name} not found, or the token cannot see it")
@@ -140,6 +160,12 @@ def resolve_category(owner, name, wanted):
             return data["id"], category["id"]
 
     available = ", ".join(c["name"] for c in categories)
+    if not required:
+        print(f'  ! no discussion category named "{wanted}" in {owner}/{name} '
+              f"— create it at https://github.com/{owner}/{name}/discussions/"
+              f"categories and it goes out with the next edition")
+        print(f"    existing categories: {available}")
+        return data["id"], None
     sys.exit(
         f'no discussion category named "{wanted}" in {owner}/{name}.\n'
         f"Existing categories: {available}\n"
@@ -231,6 +257,116 @@ def title_for(data):
 
 
 # --------------------------------------------------------------------------
+# the blog relay
+# --------------------------------------------------------------------------
+
+def blog_queue(queue):
+    """The articles waiting in one queue of content/blog.yml, top first."""
+    lines = BLOG.read_text(encoding="utf-8").splitlines()
+    _, _, items = read_block(lines, queue, required=False)
+    return [{field: item_key(item, field) for field in BLOG_FIELDS}
+            for item in items]
+
+
+def retire(queue, slug):
+    """Move a relayed article out of its queue and into `relayed:`.
+
+    Rotation is what the other queues do — they turn, and everything comes
+    round again. An article does not: it is relayed once. So this is a removal,
+    and it is done here, by whatever actually posted it, rather than by
+    rotate.py — which would retire an article the relay never managed to send.
+    """
+    lines = BLOG.read_text(encoding="utf-8").splitlines()
+
+    start, end, items = read_block(lines, queue, required=False)
+    if start is None:
+        return
+    kept = [item for item in items if item_key(item, "slug") != slug]
+    if len(kept) == len(items):
+        return
+    replace_block(lines, start, end, kept)
+
+    start, end, items = read_block(lines, "relayed", required=False)
+    if start is not None:
+        replace_block(lines, start, end, items + [[f"  - {slug}"]])
+
+    BLOG.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def render_relay(article, data, badge):
+    cover = article.get("image") or ""
+    values = {
+        "cover": (f'<p align="center">\n'
+                  f'  <a href="{article["url"]}">'
+                  f'<img alt="" src="{cover}" width="850"></a>\n'
+                  f'</p>' if cover else ""),
+        "title": article.get("title", ""),
+        "url": article.get("url", ""),
+        "date": article.get("date", ""),
+        "excerpt": article.get("excerpt", ""),
+        "badge": badge,
+        "week": data.get("week", ""),
+    }
+    body = RELAY_TEMPLATE.read_text(encoding="utf-8")
+    for key, value in values.items():
+        body = body.replace("{{" + key + "}}", str(value))
+    return body.lstrip("\n")
+
+
+def relay_blog(data, owner, name, dry_run=False, force=False):
+    """Relay the head of each blog queue into its discussion category.
+
+    One article per queue per edition. Everything here is best-effort: the
+    edition itself has already gone out, and a blog that cannot be reached or a
+    category that does not exist yet must not turn a published edition into a
+    failed run.
+    """
+    settings = data.get("blog", {}) or {}
+    mapping = settings.get("relay", {}) or {}
+    if not mapping:
+        return
+
+    print("\nblog relay:")
+    for queue, category_name in mapping.items():
+        badge = BADGE_NAMES.get(queue, queue)
+        waiting = blog_queue(queue)
+        if not waiting:
+            print(f"  {queue}: nothing waiting — nothing to relay")
+            continue
+
+        article = waiting[0]
+        title = article.get("title", "")
+        body = render_relay(article, data, badge)
+
+        if dry_run:
+            print(f"  {queue} → {category_name}: {title}\n")
+            print(body)
+            continue
+
+        repo_id, category_id = resolve_category(
+            owner, name, category_name, required=False)
+        if category_id is None:
+            continue
+
+        existing = graphql(EXISTING_QUERY, {
+            "owner": owner, "name": name, "category": category_id,
+        })["repository"]["discussions"]["nodes"]
+        clash = next((d for d in existing if d["title"] == title), None)
+        if clash and not force:
+            print(f"  {queue}: already relayed as {clash['url']} — retiring it")
+            retire(queue, article["slug"])
+            continue
+
+        created = graphql(CREATE_MUTATION, {
+            "repo": repo_id, "category": category_id,
+            "title": title, "body": body,
+        })["createDiscussion"]["discussion"]
+        print(f"  {queue} → {category_name}: {title}\n"
+              f"    {created['url']}")
+        retire(queue, article["slug"])
+
+
+# --------------------------------------------------------------------------
 
 def main():
     dry_run = "--dry-run" in sys.argv
@@ -252,6 +388,7 @@ def main():
     if dry_run:
         print(f"# {title}\n\ncategory: {category_name} in {owner}/{name}\n")
         print(body)
+        relay_blog(data, owner, name, dry_run=True)
         return
 
     repo_id, category_id = resolve_category(owner, name, category_name)
@@ -262,7 +399,11 @@ def main():
     clash = next((d for d in existing if d["title"] == title), None)
     if clash and not force:
         print(f"edition {data.get('week')} is already published: {clash['url']}")
-        print("nothing to do (pass --force to post it again)")
+        print("nothing to post again (pass --force to repost it)")
+        # The relay still runs: the edition going out and the blog going out
+        # are two separate things, and a rerun after a half-failed edition is
+        # exactly when the relay needs its second chance.
+        relay_blog(data, owner, name)
         return
 
     created = graphql(CREATE_MUTATION, {
@@ -271,6 +412,7 @@ def main():
     print(f"published {title} → {created['url']}")
 
     update_index(data, settings, owner, name, created["url"], revision)
+    relay_blog(data, owner, name, force=force)
 
 
 def update_index(data, settings, owner, name, edition_url, revision):

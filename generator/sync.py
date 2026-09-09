@@ -12,6 +12,9 @@ Sync the rotation queues with their sources of truth.
                    https://console.openapi.com/apis
     topics       ← the open discussions worth spotlighting
                    https://github.com/openapi/discussions
+    news         ← the "News" category of the Openapi blog
+    insights     ← the "API Insights" category of the same blog
+                   https://openapi.com/blog
 
 Membership belongs upstream; the *running order* belongs here. So this merges
 rather than overwrites: entries already in a queue keep their position, new
@@ -24,6 +27,12 @@ people queues regardless of what the sources say.
 
 This never decides what goes out next: that is whatever sits at the top of each
 queue, which is yours to reorder by hand.
+
+The two blog queues are the exception on both counts. They are not curated and
+they do not rotate: an article is relayed once, in publication order, so they
+are rewritten newest-first straight from the blog, minus everything already
+relayed. An article that ages off the front of the blog before its turn is
+dropped — by then it is not news any more.
 """
 
 import html
@@ -35,12 +44,14 @@ from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from blog import BADGES, entry_lines, fetch_posts  # noqa: E402
 from pools import item_key, read_block, replace_block  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 CURRENT = ROOT / "content" / "current.yml"
 APIS = ROOT / "content" / "apis.yml"
 TOPICS = ROOT / "content" / "topics.yml"
+BLOG = ROOT / "content" / "blog.yml"
 
 ORG = "openapi"
 MEMBERS_API = f"https://api.github.com/orgs/{ORG}/members?per_page=100"
@@ -50,10 +61,11 @@ CONTRIBUTORS_README = (
 API_LIBRARY = "https://console.openapi.com/apis"
 GRAPHQL = "https://api.github.com/graphql"
 
-# Categories that never enter the topic queue. The editions are the output of
-# this system rather than something to talk about, and announcements are
-# broadcasts rather than open questions.
-SKIP_CATEGORIES = {"Openapi Pulse", "Announcements"}
+# Categories that never enter the topic queue: everything this system itself
+# writes into. The editions are its output rather than something to talk about,
+# and Announcements and API Engineering are where the blog relay lands —
+# broadcasts, not open questions to spotlight on the card.
+SKIP_CATEGORIES = {"Openapi Pulse", "Announcements", "API Engineering"}
 
 COMMENT_BLOCK = re.compile(r"<!--.*?-->", re.DOTALL)
 AVATAR_LINK = re.compile(
@@ -185,6 +197,47 @@ def fetch_apis():
     return found
 
 
+def sync_blog(lines):
+    """Rewrite both blog queues from the blog, newest first.
+
+    No merge here, unlike everywhere else: the blog decides both the contents
+    and the order, and the only local state that matters is `relayed:` — the
+    slugs already posted to Discussions, which never come back.
+    """
+    _, _, relayed_items = read_block(lines, "relayed", required=False)
+    relayed = {item_key(item) for item in relayed_items}
+
+    posts = fetch_posts()
+    changed = False
+    for badge, queue in BADGES.items():
+        waiting = [p for p in posts
+                   if p["queue"] == queue and p["slug"] not in relayed]
+        start, end, items = read_block(lines, queue, required=False)
+        if start is None:
+            sys.exit(f"content/blog.yml: no top-level `{queue}:` list found")
+
+        current = [item_key(item, "slug") for item in items]
+        wanted = [p["slug"] for p in waiting]
+
+        print(f'{queue}: {len(wanted)} waiting from "{badge}" on the blog '
+              f"({BLOG.name})")
+        for slug in wanted:
+            if slug not in current:
+                print(f"  + {slug}")
+        for slug in current:
+            if slug not in wanted:
+                print(f"  - {slug} ("
+                      + ("already relayed" if slug in relayed
+                         else "off the front of the blog") + ")")
+        if wanted == current:
+            print("  already in sync")
+            continue
+
+        replace_block(lines, start, end, [entry_lines(p) for p in waiting])
+        changed = True
+    return changed
+
+
 # --------------------------------------------------------------------------
 
 def merge(current_keys, upstream):
@@ -248,6 +301,9 @@ def main():
         TOPICS, topic_lines, "topics", "number",
         lambda: upstream_topics, "open discussions")
 
+    blog_lines = BLOG.read_text(encoding="utf-8").splitlines()
+    changed_blog = sync_blog(blog_lines)
+
     if dry_run:
         print("\n--dry-run: nothing written")
         return
@@ -262,6 +318,9 @@ def main():
     if changed_topics:
         TOPICS.write_text("\n".join(topic_lines) + "\n", encoding="utf-8")
         wrote.append(TOPICS.relative_to(ROOT))
+    if changed_blog:
+        BLOG.write_text("\n".join(blog_lines) + "\n", encoding="utf-8")
+        wrote.append(BLOG.relative_to(ROOT))
 
     print("\n" + (f"updated {', '.join(str(p) for p in wrote)}"
                   if wrote else "nothing to write"))
