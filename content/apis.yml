@@ -11,9 +11,6 @@
 # disappear from the library are dropped.
 
 apis:
-  - slug: company
-    name: Company
-    url: https://console.openapi.com/apis/company/info
   - slug: esignature
     name: eSignature
     url: https://console.openapi.com/apis/esignature/info
@@ -95,3 +92,6 @@ apis:
   - slug: automotive
     name: Automotive
     url: https://console.openapi.com/apis/automotive/info
+  - slug: company
+    name: Company
+    url: https://console.openapi.com/apis/company/info

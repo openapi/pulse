@@ -14,10 +14,6 @@
 # in the published post. A topic without a `short` falls back to its title.
 
 topics:
-  - number: 6
-    short: Is this API worth integrating?
-    title: How do you decide an API is worth an integration?
-    url: https://github.com/orgs/openapi/discussions/6
   - number: 7
     short: curl, Postman, Bruno, or what?
     title: curl, Postman, Bruno, Hoppscotch — what is actually open on your second monitor?
@@ -134,3 +130,7 @@ topics:
     short: Docs pages worth copying
     title: The API docs page you wish every provider would copy
     url: https://github.com/orgs/openapi/discussions/5
+  - number: 6
+    short: Is this API worth integrating?
+    title: How do you decide an API is worth an integration?
+    url: https://github.com/orgs/openapi/discussions/6

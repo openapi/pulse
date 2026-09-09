@@ -24,12 +24,6 @@
 # first one, so that survives.
 
 news:
-  - slug: pec-api-more-control-flexibility-and-new-management-possibilities
-    date: 2026-09-04
-    title: PEC API: more control, flexibility and new management possibilities
-    url: https://openapi.com/blog/pec-api-more-control-flexibility-and-new-management-possibilities
-    image: https://openapi.com/assets/content/en/news/images/cover/copertine74.png
-    excerpt: Openapi expands the PEC API’s features with new options to customize services, manage multiple users, and increase available storage space directly via API.
   - slug: openapi-launches-the-new-advanced-electronic-signature-with-otp-api
     date: 2026-09-01
     title: Openapi launches the new Advanced Electronic Signature with OTP API
@@ -44,12 +38,6 @@ news:
     excerpt: Block payment fraud in real time with open banking verification.
 
 insights:
-  - slug: bank-transfer-beneficiary-verification-vop-what-it-is-and-how-it-works
-    date: 2026-09-01
-    title: Bank Transfer Beneficiary Verification (VoP): what it is and how it works
-    url: https://openapi.com/blog/bank-transfer-beneficiary-verification-vop-what-it-is-and-how-it-works
-    image: https://openapi.com/assets/content/en/news/images/cover/copertine512.png
-    excerpt: Verification of Payee: how the automatic verification of IBAN and beneficiary works for SEPA instant transfers
   - slug: omi-quotations-what-they-are-and-how-they-work
     date: 2026-08-26
     title: OMI Quotations: What They Are and How They Work
@@ -113,3 +101,5 @@ insights:
 
 # Slugs already relayed to Discussions. Nothing here is ever posted again.
 relayed:
+  - pec-api-more-control-flexibility-and-new-management-possibilities
+  - bank-transfer-beneficiary-verification-vop-what-it-is-and-how-it-works
