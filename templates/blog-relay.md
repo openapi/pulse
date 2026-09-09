@@ -1,5 +1,3 @@
-{{cover}}
-
 {{excerpt}}
 
 **[Read the full article on openapi.com →]({{url}})**

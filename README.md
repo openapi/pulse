@@ -255,9 +255,11 @@ category of its own:
 | News | Announcements |
 | API Insights | API Engineering |
 
-What goes out is an **extract**, never a copy: the cover, the blog's own
-summary, and a link back to the full piece. The article stays where it was
-written; Discussions gets the pointer and the conversation.
+What goes out is an **extract**, never a copy: the blog's own summary and a
+link back to the full piece. The article stays where it was written;
+Discussions gets the pointer and the conversation. No cover image — a thread
+that opens on a full-width marketing image reads as a repost rather than as an
+invitation to talk.
 
 The blog has no feed — no RSS, no JSON, the pages are server-rendered — so
 `generator/blog.py` reads the listing markup, keying on the category badge and

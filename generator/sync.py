@@ -239,6 +239,7 @@ def sync_blog(lines):
 
         current = [item_key(item, "slug") for item in items]
         wanted = [p["slug"] for p in waiting]
+        entries = [entry_lines(p) for p in waiting]
 
         print(f'{queue}: {len(wanted)} waiting from "{badge}" on the blog '
               f"({BLOG.name})")
@@ -250,11 +251,15 @@ def sync_blog(lines):
                 print(f"  - {slug} ("
                       + ("already relayed" if slug in relayed
                          else "off the front of the blog") + ")")
-        if wanted == current:
+        if wanted == current and entries == items:
             print("  already in sync")
             continue
+        if wanted == current:
+            # Same articles, changed records: the blog owns every field here,
+            # so a retitled or resummarised piece follows it.
+            print("  ~ entries refreshed from the blog")
 
-        replace_block(lines, start, end, [entry_lines(p) for p in waiting])
+        replace_block(lines, start, end, entries)
         changed = True
     return changed
 

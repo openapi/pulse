@@ -361,16 +361,11 @@ def retire(queue, slug, edition):
 
 
 def render_relay(article, data, badge):
-    cover = article.get("image") or ""
     values = {
-        "cover": (f'<p align="center">\n'
-                  f'  <a href="{article["url"]}">'
-                  f'<img alt="" src="{cover}" width="850"></a>\n'
-                  f'</p>' if cover else ""),
         "title": article.get("title", ""),
         "url": article.get("url", ""),
         "date": article.get("date", ""),
-        "excerpt": article.get("excerpt", ""),
+        "excerpt": full_stop(article.get("excerpt", "")),
         "badge": badge,
         "week": data.get("week", ""),
     }

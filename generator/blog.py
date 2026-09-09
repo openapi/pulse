@@ -11,9 +11,10 @@ of the Pulse relays the top of each queue built here into its own category:
     blog category "News"          → discussions category "Announcements"
     blog category "API Insights"  → discussions category "API Engineering"
 
-The relay is deliberately an *extract*: title, cover, the blog's own summary
-and a link back. The article stays where it was written; Discussions gets the
-pointer and the conversation.
+The relay is deliberately an *extract*: the title, the blog's own summary and a
+link back — no cover. The article stays where it was written; Discussions gets
+the pointer and the conversation, and a thread that opens on a full-width
+marketing image reads as a repost rather than an invitation.
 
 There is no feed — no RSS, no JSON, the pages are server-rendered — so the
 listing markup is what there is to read. Each card carries its category in a
@@ -50,7 +51,6 @@ TITLE = re.compile(
 DATE = re.compile(r'<strong class="text-serif">\s*(.*?)\s*</strong>', re.DOTALL)
 EXCERPT = re.compile(
     r'<p class="card-text">\s*(?:<a[^>]*>)?(.*?)(?:</a>)?\s*</p>', re.DOTALL)
-IMAGE = re.compile(r'<img src="([^"]+)"')
 TAG = re.compile(r"<[^>]+>")
 
 
@@ -75,8 +75,7 @@ def parse(page):
     """Every card on one listing page, in the order the blog lists them."""
     posts = []
     for badge in BADGE.finditer(page):
-        # The card is everything from its category badge up to the next one;
-        # the cover sits just above the badge, so it is looked for backwards.
+        # The card is everything from its category badge up to the next one.
         card = page[badge.end():badge.end() + 4000]
         title = TITLE.search(card)
         if not title:
@@ -86,14 +85,12 @@ def parse(page):
             continue
         date = DATE.search(card)
         excerpt = EXCERPT.search(card)
-        image = IMAGE.findall(page[max(0, badge.start() - 2000):badge.start()])
         posts.append({
             "badge": text(badge.group(1)),
             "slug": url.rstrip("/").rsplit("/", 1)[-1],
             "title": heading,
             "date": text(date.group(1)) if date else "",
             "url": url if url.startswith("http") else "https://openapi.com" + url,
-            "image": image[-1] if image else "",
             "excerpt": text(excerpt.group(1)) if excerpt else "",
         })
     return posts
@@ -135,12 +132,11 @@ def entry_lines(post):
         f"    date: {post['date']}",
         f"    title: {post['title']}",
         f"    url: {post['url']}",
-        f"    image: {post['image']}",
         f"    excerpt: {post['excerpt']}",
     ]
 
 
-FIELDS = ("slug", "date", "title", "url", "image", "excerpt")
+FIELDS = ("slug", "date", "title", "url", "excerpt")
 
 
 if __name__ == "__main__":
