@@ -38,22 +38,65 @@ HEIGHT = 148
 # separator that closes each one. Widths are sized to the longest label each
 # column carries, so nothing has to be truncated in the common case.
 TRACKS = (
-    {"x": 24, "width": 180, "sep": 204},
-    {"x": 222, "width": 172, "sep": 394},
-    {"x": 412, "width": 182, "sep": 594},
-    {"x": 612, "width": 244, "sep": None},
+    {"x": 24, "width": 140, "sep": 177},
+    {"x": 190, "width": 205, "sep": 408},
+    {"x": 421, "width": 195, "sep": 629},
+    {"x": 642, "width": 214, "sep": None},
 )
+
+# Breathing room kept between the end of a value and the next separator.
+TRACK_PADDING = 10
 
 LABEL_Y = 76
 VALUE_Y = 103
 AVATAR_SIZE = 26
 AVATAR_CY = 97
 
-# Character budgets per field, at the sizes below. Values longer than this are
-# clipped with an ellipsis rather than allowed to run into the next column.
-MAX_API = 22
-MAX_HANDLE = 16
-MAX_DISCUSSION = 30
+# Values are fitted to their track: the type shrinks from PREFERRED_SIZE down
+# to MIN_SIZE to make a long value fit, and only what still overflows at the
+# smallest size is clipped with an ellipsis. Real GitHub handles run long
+# (@FrancescoRicchiutiOpenapi is 25 characters), so a fixed budget would either
+# truncate half the organization or force every column to be sized for the
+# worst case.
+PREFERRED_SIZE = 14
+MIN_SIZE = 10
+
+# Approximate advance widths, in em, for the system sans-serif at weight 600.
+# Good enough to fit text into a fixed track without measuring a real font.
+_WIDE = set("mMWw@")
+_NARROW = set("iljItf.,;:'!|[]()")
+_CHAR_EM = {c: 0.86 for c in _WIDE}
+_CHAR_EM.update({c: 0.30 for c in _NARROW})
+_CHAR_EM.update({c: 0.40 for c in "-_ "})
+
+
+def text_width(text, size, spacing=0):
+    """Estimated rendered width of a string, in user units."""
+    em = 0.0
+    for char in str(text):
+        if char in _CHAR_EM:
+            em += _CHAR_EM[char]
+        elif char.isupper():
+            em += 0.68
+        elif char.isdigit():
+            em += 0.57
+        else:
+            em += 0.55
+    return em * size + spacing * max(len(str(text)) - 1, 0)
+
+
+def fit(text, budget):
+    """Largest size at which `text` fits `budget`, plus the text to draw."""
+    text = str(text)
+    size = PREFERRED_SIZE
+    while size > MIN_SIZE and text_width(text, size) > budget:
+        size -= 0.5
+    if text_width(text, size) <= budget:
+        return text, size
+    # Still too wide at the smallest size: clip until it fits.
+    while len(text) > 1 and text_width(text[:-1] + "…", size) > budget:
+        text = text[:-1]
+    return text.rstrip() + "…", size
 
 THEMES = {
     "light": {
@@ -122,7 +165,7 @@ def _mini_yaml(raw):
         key, _, value = body.partition(":")
         key, value = key.strip(), value.strip()
         if value == "":
-            child = [] if key in ("developers", "contributors") else {}
+            child = [] if key in ("developers", "contributors", "exclude") else {}
             container[key] = child
             stack.append((indent, child))
         else:
@@ -223,9 +266,10 @@ def person_el(track, nickname, avatar, theme, index):
         f'<circle cx="{x + radius}" cy="{AVATAR_CY}" r="{radius - 0.5}" '
         f'fill="none" stroke="{theme["border"]}"/>'
     )
+    handle, size = fit(f"@{nickname}",
+                       track["width"] - AVATAR_SIZE - 10 - TRACK_PADDING)
     parts.append(
-        text_el(x + AVATAR_SIZE + 10, VALUE_Y, f"@{clip(nickname, MAX_HANDLE)}",
-                theme["text"], 14, 600)
+        text_el(x + AVATAR_SIZE + 10, VALUE_Y, handle, theme["text"], size, 600)
     )
     return parts
 
@@ -297,7 +341,8 @@ def build(theme_name, data, avatars):
     discussion = (data.get("discussion", {}) or {}).get("title", "")
 
     parts.append(label_el(TRACKS[0], "API of the week", t))
-    parts.append(text_el(TRACKS[0]["x"], VALUE_Y, clip(api, MAX_API), t["text"], 14, 600))
+    api_text, api_size = fit(api, TRACKS[0]["width"] - TRACK_PADDING)
+    parts.append(text_el(TRACKS[0]["x"], VALUE_Y, api_text, t["text"], api_size, 600))
 
     parts.append(label_el(TRACKS[1], "Developer of the week", t))
     parts.extend(person_el(TRACKS[1], developer, avatars.get(developer), t, 0))
@@ -306,8 +351,8 @@ def build(theme_name, data, avatars):
     parts.extend(person_el(TRACKS[2], contributor, avatars.get(contributor), t, 1))
 
     parts.append(label_el(TRACKS[3], "Community discussion", t))
-    parts.append(text_el(TRACKS[3]["x"], VALUE_Y, clip(discussion, MAX_DISCUSSION),
-                         t["text"], 14, 600))
+    disc_text, disc_size = fit(discussion, TRACKS[3]["width"] - TRACK_PADDING)
+    parts.append(text_el(TRACKS[3]["x"], VALUE_Y, disc_text, t["text"], disc_size, 600))
 
     for track in TRACKS:
         if track["sep"]:

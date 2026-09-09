@@ -101,6 +101,7 @@ never need an editorial commit again — the weekly update happens only here.
 ```text
 content/current.yml          ← the only file edited each week
         │
+generator/sync.py            ← pulls the people from GitHub
 generator/rotate.py          ← advances the week, rotates the people
 generator/build.py           ← renders both themes, embeds the avatars
         │
@@ -136,29 +137,32 @@ The `<picture>` element gives the card a light and a dark variant so it sits
 naturally in both GitHub themes. The whole image is one link, with one
 destination — the card carries several stories but never competes with itself.
 
-### The weekly rotation
+### The people, and how they rotate
 
-`current.yml` holds two ordered pools of GitHub nicknames. The card always
-features the **head** of each list:
+The two people on the card are not hand-picked each week. They come from the
+places where the ecosystem already records who is involved:
 
-```yaml
-week: 37
-
-developers:
-  - octocat        ← on the card this week
-  - mona
-  - web-flow
-  - dependabot
-
-contributors:
-  - hubot          ← on the card this week
-  - ghost
-  - actions-user
-  - github
+```text
+https://github.com/orgs/openapi/people      → developers
+https://github.com/openapi/contributors     → contributors
 ```
 
-Running the rotation moves each head to the tail, so the next name steps
-forward and nobody repeats until the whole pool has had a turn:
+`sync.py` reads both and merges them into the pools in `current.yml`:
+
+```bash
+python3 generator/sync.py            # align the pools with the sources
+python3 generator/sync.py --dry-run  # preview the changes
+```
+
+Membership belongs upstream; the **running order** belongs here. So the sync
+merges rather than overwrites — people already in a pool keep their position,
+newcomers are appended to the tail so they queue behind everyone already
+waiting instead of jumping the line, and anyone no longer listed upstream is
+dropped.
+
+The card always features the **head** of each list. Rotating moves each head to
+the tail, so the next name steps forward and nobody repeats until the whole
+pool has had a turn:
 
 ```bash
 python3 generator/rotate.py            # bump the week, rotate, regenerate
@@ -167,14 +171,31 @@ python3 generator/rotate.py --dry-run  # preview who is up next
 
 ```text
 week 37 → 38
-  developers: @octocat → @mona
-  contributors: @hubot → @ghost
+  developers: @AlbertoVenanzoniAltravia → @cipriani1194
+  contributors: @Deadpool2000 → @Seraphim200001
 ```
 
-The order stays plain text and hand-editable: to feature someone sooner move
-them to the top, to add someone append them to the bottom. `rotate.py` edits
-the file line by line, so comments and formatting survive. After week 52 it
-rolls over into week 1 of the next year.
+The order stays plain text and hand-editable: to feature someone sooner, move
+them to the top. `rotate.py` edits the file line by line, so comments and
+hand-ordering survive. After week 52 it rolls over into week 1 of the next
+year.
+
+Anyone under `exclude` is filtered out of both pools no matter what the sources
+say. The card exists to give visibility to the people who work on and with
+Openapi, not to the person publishing it, so the author of the system stays
+out of his own rotation:
+
+```yaml
+exclude:
+  - francescobianco
+```
+
+The full cycle, once a week:
+
+```bash
+python3 generator/sync.py     # who is in
+python3 generator/rotate.py   # whose turn it is (regenerates the SVGs)
+```
 
 To change the other tracks — the API, the discussion, the CTA — edit
 `current.yml` and run the generator on its own:
@@ -183,11 +204,6 @@ To change the other tracks — the API, the discussion, the CTA — edit
 $EDITOR content/current.yml
 python3 generator/build.py
 ```
-
-> The nicknames currently in the file are **placeholders**: GitHub mascot, bot
-> and organization accounts, chosen precisely because they do not belong to
-> real people. Replace them with real community handles before going live — the
-> card publishes the face of whoever is listed.
 
 ### Design notes
 
@@ -205,8 +221,11 @@ python3 generator/build.py
 * **No external assets at all** — system font stack, no web fonts, no scripts.
 * The heartbeat mark and the trace along the bottom edge are CSS animations,
   disabled under `prefers-reduced-motion`.
-* Values are clipped with an ellipsis at a per-column character budget, so no
-  track can ever run into the next one.
+* Values are **fitted** to their track: the type shrinks from 14px down to 10px
+  to make a long value fit, and only what still overflows at the smallest size
+  is clipped. Real handles run long — `@FrancescoRicchiutiOpenapi` is 25
+  characters — so a fixed budget would either truncate half the organization or
+  force every column to be sized for the worst case.
 
 ### Still to refine
 
@@ -215,7 +234,10 @@ python3 generator/build.py
 * Hosting: `raw.githubusercontent.com` works today; GitHub Pages
   (`openapi.github.io/pulse/ticker.svg`) or a dedicated endpoint would give
   proper control over cache headers.
-* A `publish-pulse.yml` workflow to run `rotate.py` and commit the SVGs weekly.
+* A `publish-pulse.yml` workflow to run `sync.py` + `rotate.py` and commit the
+  SVGs weekly.
+* The contributors pool is currently two people, so it cycles every two weeks.
+  It widens on its own as `openapi/contributors` grows.
 
 See [CARD.md](CARD.md) for the full rationale behind the component.
 
