@@ -14,10 +14,6 @@
 # in the published post. A topic without a `short` falls back to its title.
 
 topics:
-  - number: 8
-    short: Your first request to a new API
-    title: What is the first request you send to any new API?
-    url: https://github.com/orgs/openapi/discussions/8
   - number: 9
     short: Rate limits: fair or hostile?
     title: Rate limits: fair, hostile, or just badly documented?
@@ -134,3 +130,7 @@ topics:
     short: curl, Postman, Bruno, or what?
     title: curl, Postman, Bruno, Hoppscotch — what is actually open on your second monitor?
     url: https://github.com/orgs/openapi/discussions/7
+  - number: 8
+    short: Your first request to a new API
+    title: What is the first request you send to any new API?
+    url: https://github.com/orgs/openapi/discussions/8

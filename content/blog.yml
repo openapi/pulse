@@ -24,18 +24,8 @@
 # first one, so that survives.
 
 news:
-  - slug: openapi-launches-new-verification-payee-api
-    date: 2026-08-12
-    title: Verify the payee before payment: Openapi launches the new Verification of Payee API
-    url: https://openapi.com/blog/openapi-launches-new-verification-payee-api
-    excerpt: Block payment fraud in real time with open banking verification.
 
 insights:
-  - slug: understanding-authentication-2fa-mfa-and-biometric-security
-    date: 2026-08-06
-    title: Understanding Authentication: 2FA, MFA and Biometric Security
-    url: https://openapi.com/blog/understanding-authentication-2fa-mfa-and-biometric-security
-    excerpt: A guide to 2FA, MFA and biometrics: how to protect online accounts while balancing security and user experience
   - slug: cadastral-monitoring-what-it-is-and-when-to-automate-it
     date: 2026-08-03
     title: Cadastral Monitoring: What It Is and When to Automate It
@@ -93,3 +83,9 @@ relayed:
   - slug: omi-quotations-what-they-are-and-how-they-work
     queue: insights
     edition: 41
+  - slug: openapi-launches-new-verification-payee-api
+    queue: news
+    edition: 42
+  - slug: understanding-authentication-2fa-mfa-and-biometric-security
+    queue: insights
+    edition: 42
