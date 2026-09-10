@@ -14,10 +14,6 @@
 # in the published post. A topic without a `short` falls back to its title.
 
 topics:
-  - number: 9
-    short: Rate limits: fair or hostile?
-    title: Rate limits: fair, hostile, or just badly documented?
-    url: https://github.com/orgs/openapi/discussions/9
   - number: 10
     short: Are API sandboxes worth it?
     title: Sandbox environments: genuinely useful, or a second thing to keep in sync?
@@ -134,3 +130,7 @@ topics:
     short: Your first request to a new API
     title: What is the first request you send to any new API?
     url: https://github.com/orgs/openapi/discussions/8
+  - number: 9
+    short: Rate limits: fair or hostile?
+    title: Rate limits: fair, hostile, or just badly documented?
+    url: https://github.com/orgs/openapi/discussions/9

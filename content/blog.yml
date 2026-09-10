@@ -26,11 +26,6 @@
 news:
 
 insights:
-  - slug: cadastral-monitoring-what-it-is-and-when-to-automate-it
-    date: 2026-08-03
-    title: Cadastral Monitoring: What It Is and When to Automate It
-    url: https://openapi.com/blog/cadastral-monitoring-what-it-is-and-when-to-automate-it
-    excerpt: A guide to the alert system that tracks property changes, liens, and cadastral values without the need for manual property searches.
   - slug: split-payment-extended
     date: 2026-07-29
     title: Split payment extended until 2029: no changes from 1 July 2026
@@ -89,3 +84,6 @@ relayed:
   - slug: understanding-authentication-2fa-mfa-and-biometric-security
     queue: insights
     edition: 42
+  - slug: cadastral-monitoring-what-it-is-and-when-to-automate-it
+    queue: insights
+    edition: 43
