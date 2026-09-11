@@ -14,10 +14,6 @@
 # in the published post. A topic without a `short` falls back to its title.
 
 topics:
-  - number: 11
-    short: When is a typed client overkill?
-    title: When does a REST API deserve a typed client, and when is it overkill?
-    url: https://github.com/orgs/openapi/discussions/11
   - number: 12
     short: Where do you find APIs now?
     title: Where do you actually find an API these days?
@@ -134,3 +130,7 @@ topics:
     short: Are API sandboxes worth it?
     title: Sandbox environments: genuinely useful, or a second thing to keep in sync?
     url: https://github.com/orgs/openapi/discussions/10
+  - number: 11
+    short: When is a typed client overkill?
+    title: When does a REST API deserve a typed client, and when is it overkill?
+    url: https://github.com/orgs/openapi/discussions/11

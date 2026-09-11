@@ -26,11 +26,6 @@
 news:
 
 insights:
-  - slug: transactional-sms-what-are-they-and-what-are-they-used-for
-    date: 2026-07-16
-    title: Transactional SMS: What Are They and What Are They Used For?
-    url: https://openapi.com/blog/transactional-sms-what-are-they-and-what-are-they-used-for
-    excerpt: A Practical Guide to Transactional SMS: GDPR Compliance, Operational Benefits, and API Integration
   - slug: iban-what-it-is-and-how-to-verify-it
     date: 2026-07-08
     title: IBAN: What It Is and How to Verify It
@@ -83,3 +78,6 @@ relayed:
   - slug: split-payment-extended
     queue: insights
     edition: 44
+  - slug: transactional-sms-what-are-they-and-what-are-they-used-for
+    queue: insights
+    edition: 45

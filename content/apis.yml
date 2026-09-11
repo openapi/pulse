@@ -15,10 +15,6 @@
 # there is no room for more — but the published edition carries the pitch.
 
 apis:
-  - slug: marchetemporali
-    name: Time Stamping
-    url: https://console.openapi.com/apis/marchetemporali/info
-    about: Date and time stamp any document
   - slug: realestate
     name: Real Estate
     url: https://console.openapi.com/apis/realestate/info
@@ -127,3 +123,7 @@ apis:
     name: Invoice
     url: https://console.openapi.com/apis/invoice/info
     about: Send Electronic Invoices and e-Receipts Easily, Quickly and Securely
+  - slug: marchetemporali
+    name: Time Stamping
+    url: https://console.openapi.com/apis/marchetemporali/info
+    about: Date and time stamp any document
