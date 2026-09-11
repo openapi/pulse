@@ -24,6 +24,11 @@
 # first one, so that survives.
 
 news:
+  - slug: new-real-estate-apis-omi-quotations-comparables-and-historical-prices-to-enrich-your-real-estate-software
+    date: 2026-09-09
+    title: New Real Estate APIs: OMI Quotations, Comparables, and Historical Prices to Enrich Your Real Estate Software
+    url: https://openapi.com/blog/new-real-estate-apis-omi-quotations-comparables-and-historical-prices-to-enrich-your-real-estate-software
+    excerpt: OpenAPI expands its suite dedicated to Real Estate with three new real-time services that simplify valuations, market analysis, and real estate trend monitoring in Italy.
 
 insights:
   - slug: split-payment-extended
@@ -56,11 +61,6 @@ insights:
     title: Openapi Skills: The New GitHub Repository Dedicated to AI Agent Capabilities
     url: https://openapi.com/blog/openapi-skills-the-new-github-repository-dedicated-to-ai-agent-capabilities
     excerpt: A Resource Hub for Developers, Automation, and Artificial Intelligence
-  - slug: how-electronic-invoicing-works-in-germany
-    date: 2026-06-11
-    title: How Electronic Invoicing Works in Germany
-    url: https://openapi.com/blog/how-electronic-invoicing-works-in-germany
-    excerpt: Mandatory B2B E-Invoicing in Germany: A Practical Guide to Issuing and Transmitting Electronic Invoices
 
 # Articles already relayed to Discussions. Nothing here is ever posted again,
 # and the edition each one went out with is what stops a second run of
