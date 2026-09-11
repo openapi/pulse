@@ -24,18 +24,8 @@
 # first one, so that survives.
 
 news:
-  - slug: new-real-estate-apis-omi-quotations-comparables-and-historical-prices-to-enrich-your-real-estate-software
-    date: 2026-09-09
-    title: New Real Estate APIs: OMI Quotations, Comparables, and Historical Prices to Enrich Your Real Estate Software
-    url: https://openapi.com/blog/new-real-estate-apis-omi-quotations-comparables-and-historical-prices-to-enrich-your-real-estate-software
-    excerpt: OpenAPI expands its suite dedicated to Real Estate with three new real-time services that simplify valuations, market analysis, and real estate trend monitoring in Italy.
 
 insights:
-  - slug: split-payment-extended
-    date: 2026-07-29
-    title: Split payment extended until 2029: no changes from 1 July 2026
-    url: https://openapi.com/blog/split-payment-extended
-    excerpt: The EU Council extends the split payment mechanism until 2029: no changes for invoices issued to public administrations and public entities.
   - slug: transactional-sms-what-are-they-and-what-are-they-used-for
     date: 2026-07-16
     title: Transactional SMS: What Are They and What Are They Used For?
@@ -87,3 +77,9 @@ relayed:
   - slug: cadastral-monitoring-what-it-is-and-when-to-automate-it
     queue: insights
     edition: 43
+  - slug: new-real-estate-apis-omi-quotations-comparables-and-historical-prices-to-enrich-your-real-estate-software
+    queue: news
+    edition: 44
+  - slug: split-payment-extended
+    queue: insights
+    edition: 44

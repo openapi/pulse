@@ -14,10 +14,6 @@
 # in the published post. A topic without a `short` falls back to its title.
 
 topics:
-  - number: 10
-    short: Are API sandboxes worth it?
-    title: Sandbox environments: genuinely useful, or a second thing to keep in sync?
-    url: https://github.com/orgs/openapi/discussions/10
   - number: 11
     short: When is a typed client overkill?
     title: When does a REST API deserve a typed client, and when is it overkill?
@@ -134,3 +130,7 @@ topics:
     short: Rate limits: fair or hostile?
     title: Rate limits: fair, hostile, or just badly documented?
     url: https://github.com/orgs/openapi/discussions/9
+  - number: 10
+    short: Are API sandboxes worth it?
+    title: Sandbox environments: genuinely useful, or a second thing to keep in sync?
+    url: https://github.com/orgs/openapi/discussions/10
