@@ -14,10 +14,6 @@
 # in the published post. A topic without a `short` falls back to its title.
 
 topics:
-  - number: 12
-    short: Where do you find APIs now?
-    title: Where do you actually find an API these days?
-    url: https://github.com/orgs/openapi/discussions/12
   - number: 13
     short: Versioning: URL or header?
     title: Versioning: in the URL, in a header, or never break anything?
@@ -134,3 +130,7 @@ topics:
     short: When is a typed client overkill?
     title: When does a REST API deserve a typed client, and when is it overkill?
     url: https://github.com/orgs/openapi/discussions/11
+  - number: 12
+    short: Where do you find APIs now?
+    title: Where do you actually find an API these days?
+    url: https://github.com/orgs/openapi/discussions/12

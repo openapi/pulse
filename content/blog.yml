@@ -26,11 +26,6 @@
 news:
 
 insights:
-  - slug: iban-what-it-is-and-how-to-verify-it
-    date: 2026-07-08
-    title: IBAN: What It Is and How to Verify It
-    url: https://openapi.com/blog/iban-what-it-is-and-how-to-verify-it
-    excerpt: International Bank Account Number: when to verify a bank account's IBAN and how to do it
   - slug: electronic-invoicing-in-france-how-it-works-and-what-changes-from-september-1
     date: 2026-06-30
     title: Electronic Invoicing in France: How It Works and What Changes from September 1
@@ -81,3 +76,6 @@ relayed:
   - slug: transactional-sms-what-are-they-and-what-are-they-used-for
     queue: insights
     edition: 45
+  - slug: iban-what-it-is-and-how-to-verify-it
+    queue: insights
+    edition: 46
