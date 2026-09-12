@@ -26,11 +26,6 @@
 news:
 
 insights:
-  - slug: electronic-invoicing-in-france-how-it-works-and-what-changes-from-september-1
-    date: 2026-06-30
-    title: Electronic Invoicing in France: How It Works and What Changes from September 1
-    url: https://openapi.com/blog/electronic-invoicing-in-france-how-it-works-and-what-changes-from-september-1
-    excerpt: A Guide to Electronic Invoicing in France: How It Works, the Formats, and the Upcoming Deadlines
   - slug: 2-way-sms-what-it-is-and-how-it-works
     date: 2026-06-17
     title: 2-Way SMS: What It Is and How It Works
@@ -79,3 +74,6 @@ relayed:
   - slug: iban-what-it-is-and-how-to-verify-it
     queue: insights
     edition: 46
+  - slug: electronic-invoicing-in-france-how-it-works-and-what-changes-from-september-1
+    queue: insights
+    edition: 47

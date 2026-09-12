@@ -15,10 +15,6 @@
 # there is no room for more — but the published edition carries the pitch.
 
 apis:
-  - slug: risk
-    name: Risk
-    url: https://console.openapi.com/apis/risk/info
-    about: All reports and data to verify the reliability of private and legal entities
   - slug: smsv2
     name: SMS v2
     url: https://console.openapi.com/apis/smsv2/info
@@ -127,3 +123,7 @@ apis:
     name: Real Estate
     url: https://console.openapi.com/apis/realestate/info
     about: The fundamental data for any effective real estate valuation!
+  - slug: risk
+    name: Risk
+    url: https://console.openapi.com/apis/risk/info
+    about: All reports and data to verify the reliability of private and legal entities

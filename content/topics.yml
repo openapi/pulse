@@ -14,10 +14,6 @@
 # in the published post. A topic without a `short` falls back to its title.
 
 topics:
-  - number: 13
-    short: Versioning: URL or header?
-    title: Versioning: in the URL, in a header, or never break anything?
-    url: https://github.com/orgs/openapi/discussions/13
   - number: 14
     short: Which integration is missing?
     title: Which integration should exist and does not?
@@ -134,3 +130,7 @@ topics:
     short: Where do you find APIs now?
     title: Where do you actually find an API these days?
     url: https://github.com/orgs/openapi/discussions/12
+  - number: 13
+    short: Versioning: URL or header?
+    title: Versioning: in the URL, in a header, or never break anything?
+    url: https://github.com/orgs/openapi/discussions/13
