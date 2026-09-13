@@ -26,11 +26,6 @@
 news:
 
 insights:
-  - slug: 2-way-sms-what-it-is-and-how-it-works
-    date: 2026-06-17
-    title: 2-Way SMS: What It Is and How It Works
-    url: https://openapi.com/blog/2-way-sms-what-it-is-and-how-it-works
-    excerpt: Inbound vs Outbound: How Two-Way SMS Works and Why to Use It
   - slug: openapi-skills-the-new-github-repository-dedicated-to-ai-agent-capabilities
     date: 2026-06-15
     title: Openapi Skills: The New GitHub Repository Dedicated to AI Agent Capabilities
@@ -77,3 +72,6 @@ relayed:
   - slug: electronic-invoicing-in-france-how-it-works-and-what-changes-from-september-1
     queue: insights
     edition: 47
+  - slug: 2-way-sms-what-it-is-and-how-it-works
+    queue: insights
+    edition: 48
