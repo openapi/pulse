@@ -26,11 +26,6 @@
 news:
 
 insights:
-  - slug: openapi-skills-the-new-github-repository-dedicated-to-ai-agent-capabilities
-    date: 2026-06-15
-    title: Openapi Skills: The New GitHub Repository Dedicated to AI Agent Capabilities
-    url: https://openapi.com/blog/openapi-skills-the-new-github-repository-dedicated-to-ai-agent-capabilities
-    excerpt: A Resource Hub for Developers, Automation, and Artificial Intelligence
 
 # Articles already relayed to Discussions. Nothing here is ever posted again,
 # and the edition each one went out with is what stops a second run of
@@ -75,3 +70,6 @@ relayed:
   - slug: 2-way-sms-what-it-is-and-how-it-works
     queue: insights
     edition: 48
+  - slug: openapi-skills-the-new-github-repository-dedicated-to-ai-agent-capabilities
+    queue: insights
+    edition: 49

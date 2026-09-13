@@ -14,10 +14,6 @@
 # in the published post. A topic without a `short` falls back to its title.
 
 topics:
-  - number: 15
-    short: One small CLI: what should it do?
-    title: If one small CLI tool shipped next month, what should it do?
-    url: https://github.com/orgs/openapi/discussions/15
   - number: 16
     short: The tool nobody has built
     title: What belongs in an API developer toolbox that nobody has built?
@@ -134,3 +130,7 @@ topics:
     short: Which integration is missing?
     title: Which integration should exist and does not?
     url: https://github.com/orgs/openapi/discussions/14
+  - number: 15
+    short: One small CLI: what should it do?
+    title: If one small CLI tool shipped next month, what should it do?
+    url: https://github.com/orgs/openapi/discussions/15
