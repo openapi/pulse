@@ -14,10 +14,6 @@
 # in the published post. A topic without a `short` falls back to its title.
 
 topics:
-  - number: 17
-    short: What makes you send a PR?
-    title: What would make you actually contribute to an SDK you use?
-    url: https://github.com/orgs/openapi/discussions/17
   - number: 18
     short: A cookbook: which 20 recipes?
     title: A cookbook of 20-line recipes: which 20 recipes?
@@ -134,3 +130,7 @@ topics:
     short: The tool nobody has built
     title: What belongs in an API developer toolbox that nobody has built?
     url: https://github.com/orgs/openapi/discussions/16
+  - number: 17
+    short: What makes you send a PR?
+    title: What would make you actually contribute to an SDK you use?
+    url: https://github.com/orgs/openapi/discussions/17
