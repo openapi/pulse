@@ -14,10 +14,6 @@
 # in the published post. A topic without a `short` falls back to its title.
 
 topics:
-  - number: 19
-    short: What should Certified API mean?
-    title: What should a 'Certified API' badge actually certify?
-    url: https://github.com/orgs/openapi/discussions/19
   - number: 20
     short: What makes an API health score?
     title: If an API had a health score, what would go into it?
@@ -134,3 +130,7 @@ topics:
     short: A cookbook: which 20 recipes?
     title: A cookbook of 20-line recipes: which 20 recipes?
     url: https://github.com/orgs/openapi/discussions/18
+  - number: 19
+    short: What should Certified API mean?
+    title: What should a 'Certified API' badge actually certify?
+    url: https://github.com/orgs/openapi/discussions/19
