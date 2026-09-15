@@ -21,6 +21,7 @@ subset of YAML that content/current.yml uses.
 
 import base64
 import sys
+from datetime import date
 from pathlib import Path
 from urllib.error import URLError, HTTPError
 from urllib.request import Request, urlopen
@@ -139,13 +140,28 @@ FONT = ("-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,"
 # --------------------------------------------------------------------------
 
 def load_content():
-    """Parse content/current.yml into a plain dict."""
+    """Parse content/current.yml into a plain dict, stamped with this week.
+
+    The week and year are the ISO calendar week of the day the edition is
+    built, not a number kept in the content: a counter drifts with every manual
+    or retried run, while the calendar is the same for the card, the post and
+    the pinned index built within the same run.
+    """
     raw = CONTENT.read_text(encoding="utf-8")
     try:
         import yaml
     except ImportError:
-        return _mini_yaml(raw)
-    return yaml.safe_load(raw)
+        data = _mini_yaml(raw)
+    else:
+        data = yaml.safe_load(raw)
+    calendar = date.today().isocalendar()
+    data["year"], data["week"] = calendar[0], calendar[1]
+    return data
+
+
+def week_key(data):
+    """This edition's identity across years, e.g. 2026-W38."""
+    return f"{data['year']}-W{data['week']:02d}"
 
 
 def _mini_yaml(raw):
@@ -462,7 +478,7 @@ def main():
         if nickname and nickname not in avatars:
             avatars[nickname] = avatar_data_uri(nickname)
 
-    print(f"edition {data.get('week')}: {featured_api().get('name', '?')} (api), "
+    print(f"week {data.get('week')}: {featured_api().get('name', '?')} (api), "
           f"@{developer} (developer), @{contributor} (contributor)")
 
     PUBLIC.mkdir(exist_ok=True)

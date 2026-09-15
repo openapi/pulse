@@ -99,7 +99,7 @@ The content lives in exactly one place. Repositories embed a stable URL and
 never need an editorial commit again — the update happens only here.
 
 ```text
-content/current.yml          ← the edition number, the CTA, the people queues
+content/current.yml          ← the CTA, the people queues
 content/apis.yml             ← the API queue
 content/topics.yml           ← the discussion queue
 content/blog.yml             ← the blog relay queues
@@ -119,9 +119,8 @@ public/ticker-dark.svg
 ```
 
 `.github/workflows/pulse.yml` runs the whole cycle on a schedule and commits
-the result back. **Daily for now**, deliberately — the cadence is short so the
-loop can be watched working day after day before it is trusted with a weekly
-rhythm. Switching to weekly is one line in the cron.
+the result back, **every Monday at 13:00 Italian time**. Each edition is named
+after the ISO calendar week it goes out in.
 
 ### Embedding it in a repository
 
@@ -320,12 +319,8 @@ system writes, and the card spotlights conversations, not broadcasts.
 * Hosting: `raw.githubusercontent.com` works today; GitHub Pages
   (`openapi.github.io/pulse/ticker.svg`) or a dedicated endpoint would give
   proper control over cache headers.
-* Move the schedule from daily to weekly once the loop has been watched
-  running end to end.
 * The contributors queue is currently two people, so it turns over every two
   editions. It widens on its own as `openapi/contributors` grows.
-* The `week` counter is a plain increment, not the real ISO week — while the
-  cadence is daily the two cannot agree, and it rolls over from 52 to 1.
 
 See [CARD.md](CARD.md) for the full rationale behind the component.
 

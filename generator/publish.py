@@ -42,7 +42,7 @@ from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build import featured, featured_api, featured_topic, load_content  # noqa: E402
+from build import featured, featured_api, featured_topic, load_content, week_key  # noqa: E402
 from blog import BADGES, FIELDS as BLOG_FIELDS  # noqa: E402
 from pools import item_key, read_block, replace_block  # noqa: E402
 
@@ -292,18 +292,18 @@ def index_body(data, edition_url, revision):
         f"The Openapi ecosystem publishes an edition of the **Pulse** on a "
         f"regular beat: the API worth a look, the people building and "
         f"contributing, and the discussion worth joining.\n\n"
-        f"### 👉 Latest edition: [{title_for(data)}]({edition_url})\n\n"
+        f"### 👉 Latest: [{title_for(data)}]({edition_url})\n\n"
         f"Every past edition is collected in the "
         f"[Openapi Pulse category]"
         f"(https://github.com/openapi/discussions/discussions/categories/openapi-pulse).\n\n"
         f"<sub>This post is kept up to date automatically by "
         f"[openapi/pulse](https://github.com/openapi/pulse) — currently "
-        f"pointing at edition {week}. Do not edit it by hand.</sub>\n"
+        f"pointing at week {week}. Do not edit it by hand.</sub>\n"
     )
 
 
 def title_for(data):
-    return f"Openapi Pulse — Edition {data.get('week', '')}"
+    return f"Openapi Pulse — Week {data.get('week', '')}"
 
 
 # --------------------------------------------------------------------------
@@ -388,13 +388,15 @@ def relay_blog(data, owner, name, dry_run=False, force=False):
     if not mapping:
         return
 
-    edition = str(data.get("week", ""))
+    # Recorded as 2026-W38 rather than a bare number, so the same week of a
+    # later year is not mistaken for one that has already been relayed.
+    edition = week_key(data)
 
     print("\nblog relay:")
     for queue, category_name in mapping.items():
         badge = BADGE_NAMES.get(queue, queue)
         if not dry_run and edition in relayed_editions(queue):
-            print(f"  {queue}: already relayed in edition {edition} — "
+            print(f"  {queue}: already relayed in {edition} — "
                   f"nothing more goes out until the queues advance")
             continue
 
@@ -467,7 +469,7 @@ def main():
     })["repository"]["discussions"]["nodes"]
     clash = next((d for d in existing if d["title"] == title), None)
     if clash and not force:
-        print(f"edition {data.get('week')} is already published: {clash['url']}")
+        print(f"week {data.get('week')} is already published: {clash['url']}")
         print("nothing to post again (pass --force to repost it)")
         # The relay still runs: the edition going out and the blog going out
         # are two separate things, and a rerun after a half-failed edition is

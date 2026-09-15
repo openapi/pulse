@@ -4,7 +4,7 @@ Advance the queues by one edition.
 
     python3 generator/rotate.py [--dry-run]
 
-Bumps `week` in content/current.yml and moves the top entry of every queue —
+Moves the top entry of every queue —
 developers, contributors, apis, topics — to the bottom, so the next one comes up and
 nobody repeats until the whole queue has had a turn.
 
@@ -35,32 +35,6 @@ ROOT = Path(__file__).resolve().parent.parent
 CURRENT = ROOT / "content" / "current.yml"
 APIS = ROOT / "content" / "apis.yml"
 TOPICS = ROOT / "content" / "topics.yml"
-LAST_WEEK_OF_YEAR = 52
-
-
-def bump_week(lines):
-    """Advance `week`, rolling over into the next year after week 52."""
-    week = year = None
-    for i, line in enumerate(lines):
-        if re.match(r"^week:\s*\d+\s*$", line):
-            week = (i, int(line.split(":")[1]))
-        elif re.match(r"^year:\s*\d+\s*$", line):
-            year = (i, int(line.split(":")[1]))
-
-    if week is None:
-        sys.exit("content/current.yml: no top-level `week:` key found")
-
-    index, value = week
-    new_value = value + 1
-    if new_value > LAST_WEEK_OF_YEAR:
-        new_value = 1
-        if year is not None:
-            y_index, y_value = year
-            lines[y_index] = f"year: {y_value + 1}"
-    lines[index] = f"week: {new_value}"
-    return value, new_value
-
-
 def rotate(lines, key, field=None):
     """Move the top entry of a queue to the bottom."""
     start, end, items = read_block(lines, key)
@@ -81,8 +55,6 @@ def main():
     api_lines = APIS.read_text(encoding="utf-8").splitlines()
     topic_lines = TOPICS.read_text(encoding="utf-8").splitlines()
 
-    old_week, new_week = bump_week(current_lines)
-    print(f"edition {old_week} → {new_week}")
     rotate(current_lines, "developers")
     rotate(current_lines, "contributors")
     rotate(api_lines, "apis", field="slug")

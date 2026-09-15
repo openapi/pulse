@@ -15,9 +15,9 @@
 # The APIs, the discussion topics and the blog relay live in their own files —
 # content/apis.yml, content/topics.yml and content/blog.yml — because each of
 # their entries is a record rather than a bare handle.
-
-week: 3
-year: 2027
+#
+# There is no week number here: every run stamps the edition with the ISO
+# calendar week it is built in.
 
 # The card has a single call to action: the whole image links here.
 cta:
