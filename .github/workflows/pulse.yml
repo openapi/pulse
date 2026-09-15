@@ -1,8 +1,7 @@
 # The heartbeat itself: one edition of the Pulse, start to finish.
 #
-# Daily for now, on purpose — the cadence is short so the whole loop can be
-# watched working day after day before it is trusted with a weekly rhythm.
-# Switching to weekly is one line: see the cron below.
+# Weekly, every Monday at 13:00 Italian time. The loop ran daily while it was
+# being watched; it is now trusted with its weekly rhythm.
 #
 # Order matters. The card is built and committed BEFORE the post goes out, so
 # the discussion can link the SVG at an immutable commit and keep showing the
@@ -17,12 +16,9 @@ name: Pulse
 
 on:
   schedule:
-    # Daily at 07:00 UTC while the loop is being watched.
-    # Weekly, Monday only: "0 7 * * 1"
-    - cron: "0 7 * * *"
-    # TEMPORARY — a second daily slot at 15:05 UTC, added only to watch the
-    # first scheduled runs land. Remove this line once the loop is trusted.
-    - cron: "5 15 * * *"
+    # Monday at 11:00 UTC = 13:00 in Italy under summer time (CEST).
+    # Cron is UTC-only, so in winter (CET) this lands at 12:00 Italian time.
+    - cron: "0 11 * * 1"
   workflow_dispatch:
 
 permissions:
