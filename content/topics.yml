@@ -14,10 +14,6 @@
 # in the published post. A topic without a `short` falls back to its title.
 
 topics:
-  - number: 20
-    short: What makes an API health score?
-    title: If an API had a health score, what would go into it?
-    url: https://github.com/orgs/openapi/discussions/20
   - number: 21
     short: Spec to code: what is missing?
     title: What is still missing between an OpenAPI specification and working code?
@@ -134,3 +130,7 @@ topics:
     short: What should Certified API mean?
     title: What should a 'Certified API' badge actually certify?
     url: https://github.com/orgs/openapi/discussions/19
+  - number: 20
+    short: What makes an API health score?
+    title: If an API had a health score, what would go into it?
+    url: https://github.com/orgs/openapi/discussions/20
