@@ -292,7 +292,7 @@ system writes, and the card spotlights conversations, not broadcasts.
 
 ### Design notes
 
-* **880 × 148**, one line of identity and one line of content — small enough
+* **894 × 148**, one line of identity and one line of content — small enough
   not to steal space from the project, distinctive enough to be recognized
   across repositories.
 * **Editorial, not CI.** No Shields-style key/value pills: a badge says

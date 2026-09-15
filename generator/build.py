@@ -36,17 +36,17 @@ TOPICS = ROOT / "content" / "topics.yml"
 PUBLIC = ROOT / "public"
 CACHE = Path(__file__).resolve().parent / ".cache"
 
-WIDTH = 880
+WIDTH = 894
 HEIGHT = 148
 
 # Four editorial tracks: x origin, usable width, and the x of the hairline
 # separator that closes each one. Widths are sized to the longest label each
 # column carries, so nothing has to be truncated in the common case.
 TRACKS = (
-    {"x": 24, "width": 140, "sep": 177},
-    {"x": 190, "width": 205, "sep": 408},
-    {"x": 421, "width": 195, "sep": 629},
-    {"x": 642, "width": 214, "sep": None},
+    {"x": 24, "width": 143, "sep": 180},
+    {"x": 193, "width": 209, "sep": 415},
+    {"x": 428, "width": 198, "sep": 639},
+    {"x": 652, "width": 218, "sep": None},
 )
 
 # Breathing room kept between the end of a value and the next separator.
