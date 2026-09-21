@@ -24,18 +24,8 @@
 # first one, so that survives.
 
 news:
-  - slug: new-vies-verification-api-check-european-vat-numbers-for-intra-eu-transactions
-    date: 2026-09-16
-    title: New VIES Verification API: Check European VAT Numbers for Intra-EU Transactions
-    url: https://openapi.com/blog/new-vies-verification-api-check-european-vat-numbers-for-intra-eu-transactions
-    excerpt: OpenAPI expands its Company suite with VIES Verification, the new API that allows you to check in real time whether a European VAT number is valid for intra-EU transactions.
 
 insights:
-  - slug: new-sms-regulations-in-spain-what-is-the-cnmc-alias-registry-and-what-changes
-    date: 2026-09-16
-    title: New SMS Regulations in Spain: What Is the CNMC Alias Registry and What Changes
-    url: https://openapi.com/blog/new-sms-regulations-in-spain-what-is-the-cnmc-alias-registry-and-what-changes
-    excerpt: How the CNMC Alias Registry works in Spain and how to register or update Aliases to avoid SMS delivery blocks
 
 # Articles already relayed to Discussions. Nothing here is ever posted again,
 # and the edition each one went out with is what stops a second run of
@@ -83,3 +73,9 @@ relayed:
   - slug: openapi-skills-the-new-github-repository-dedicated-to-ai-agent-capabilities
     queue: insights
     edition: 49
+  - slug: new-vies-verification-api-check-european-vat-numbers-for-intra-eu-transactions
+    queue: news
+    edition: 2026-W39
+  - slug: new-sms-regulations-in-spain-what-is-the-cnmc-alias-registry-and-what-changes
+    queue: insights
+    edition: 2026-W39

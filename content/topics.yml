@@ -14,10 +14,6 @@
 # in the published post. A topic without a `short` falls back to its title.
 
 topics:
-  - number: 21
-    short: Spec to code: what is missing?
-    title: What is still missing between an OpenAPI specification and working code?
-    url: https://github.com/orgs/openapi/discussions/21
   - number: 22
     short: Do agents still need SDKs?
     title: Do AI agents still need SDKs, or is a good specification enough?
@@ -134,3 +130,7 @@ topics:
     short: What makes an API health score?
     title: If an API had a health score, what would go into it?
     url: https://github.com/orgs/openapi/discussions/20
+  - number: 21
+    short: Spec to code: what is missing?
+    title: What is still missing between an OpenAPI specification and working code?
+    url: https://github.com/orgs/openapi/discussions/21
