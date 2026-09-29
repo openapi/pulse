@@ -37,6 +37,7 @@ dropped — by then it is not news any more.
 
 import html
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -54,7 +55,7 @@ TOPICS = ROOT / "content" / "topics.yml"
 BLOG = ROOT / "content" / "blog.yml"
 
 ORG = "openapi"
-MEMBERS_API = f"https://api.github.com/orgs/{ORG}/members?per_page=100"
+MEMBERS_API = f"https://api.github.com/orgs/{ORG}/public_members?per_page=100"
 CONTRIBUTORS_README = (
     f"https://raw.githubusercontent.com/{ORG}/contributors/main/README.md"
 )
@@ -78,11 +79,20 @@ API_ABOUT = re.compile(
 TAG = re.compile(r"<[^>]+>")
 
 
+def github_token():
+    return next((os.environ[v] for v in
+                 ("PULSE_DISCUSSIONS_TOKEN", "GH_TOKEN", "GITHUB_TOKEN")
+                 if os.environ.get(v)), None)
+
+
 def fetch(url, accept="application/vnd.github+json"):
-    request = Request(url, headers={
-        "User-Agent": "openapi-pulse",
-        "Accept": accept,
-    })
+    headers = {"User-Agent": "openapi-pulse", "Accept": accept}
+    # Anonymous REST calls share a 60/hour limit per runner IP, which hosted
+    # runners regularly exhaust; authenticated calls get their own 5000/hour.
+    token = github_token()
+    if token and url.startswith("https://api.github.com/"):
+        headers["Authorization"] = f"Bearer {token}"
+    request = Request(url, headers=headers)
     try:
         with urlopen(request, timeout=20) as response:
             return response.read().decode("utf-8", errors="replace")
@@ -126,11 +136,7 @@ def fetch_topics():
     file.
     """
     import json as _json
-    import os
-
-    token = next((os.environ[v] for v in
-                  ("PULSE_DISCUSSIONS_TOKEN", "GH_TOKEN", "GITHUB_TOKEN")
-                  if os.environ.get(v)), None)
+    token = github_token()
     if not token:
         print("  ! no GitHub token in the environment; leaving the topic queue "
               "untouched")
