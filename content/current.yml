@@ -78,7 +78,6 @@ exclude:
   - francescobianco
 
 developers:
-  - cipriani1194
   - FrancescoRicchiutiOpenapi
   - GiovanniOpenapi
   - Luca941-c
@@ -87,7 +86,8 @@ developers:
   - MicheleOpenApi
   - SimoneOpenapi
   - AlbertoVenanzoniAltravia
+  - cipriani1194
 
 contributors:
-  - Seraphim200001
   - Deadpool2000
+  - Seraphim200001
