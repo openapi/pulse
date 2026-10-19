@@ -14,10 +14,6 @@
 # in the published post. A topic without a `short` falls back to its title.
 
 topics:
-  - number: 24
-    short: Tool call fails: what next?
-    title: Your agent's API call fails. What should happen next?
-    url: https://github.com/orgs/openapi/discussions/24
   - number: 25
     short: How do you eval an API agent?
     title: How do you evaluate an agent that talks to real APIs?
@@ -140,3 +136,7 @@ topics:
   - number: 72
     title: gknowledge 0.3: a Flatpak for every distro, and pages that know their source changed
     url: https://github.com/orgs/openapi/discussions/72
+  - number: 24
+    short: Tool call fails: what next?
+    title: Your agent's API call fails. What should happen next?
+    url: https://github.com/orgs/openapi/discussions/24
