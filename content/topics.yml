@@ -134,3 +134,9 @@ topics:
     short: How many MCP servers do you keep?
     title: How many MCP servers do you actually keep enabled?
     url: https://github.com/orgs/openapi/discussions/23
+  - number: 71
+    title: Introducing gknowledge 0.2: Karpathy's LLM Wiki as a native GNOME app
+    url: https://github.com/orgs/openapi/discussions/71
+  - number: 72
+    title: gknowledge 0.3: a Flatpak for every distro, and pages that know their source changed
+    url: https://github.com/orgs/openapi/discussions/72
