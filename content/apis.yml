@@ -27,10 +27,6 @@ apis:
     name: Oauth
     url: https://console.openapi.com/apis/oauth/info
     about: API OAuth v1 has been replaced by the endpoints available in OAuth v2.
-  - slug: sms
-    name: SMS v1
-    url: https://console.openapi.com/apis/sms/info
-    about: API SMS v1 has been replaced by the endpoints available in SMS v2.
   - slug: visengine
     name: Visengine
     url: https://console.openapi.com/apis/visengine/info
