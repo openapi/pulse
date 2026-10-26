@@ -14,10 +14,6 @@
 # in the published post. A topic without a `short` falls back to its title.
 
 topics:
-  - number: 25
-    short: How do you eval an API agent?
-    title: How do you evaluate an agent that talks to real APIs?
-    url: https://github.com/orgs/openapi/discussions/25
   - number: 26
     short: NL to API call: product or demo?
     title: Is 'natural language to API call' a product, or a demo?
@@ -140,3 +136,7 @@ topics:
     short: Tool call fails: what next?
     title: Your agent's API call fails. What should happen next?
     url: https://github.com/orgs/openapi/discussions/24
+  - number: 25
+    short: How do you eval an API agent?
+    title: How do you evaluate an agent that talks to real APIs?
+    url: https://github.com/orgs/openapi/discussions/25

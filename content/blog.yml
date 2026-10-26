@@ -26,11 +26,6 @@
 news:
 
 insights:
-  - slug: vies-verification-check-eu-vat-number
-    date: 2026-10-23
-    title: VIES Verification: How to Check an EU VAT Number
-    url: https://openapi.com/blog/vies-verification-check-eu-vat-number
-    excerpt: Discover what VIES is, how to verify an EU VAT number, and what information the European system provides for intra-EU transactions.
 
 # Articles already relayed to Discussions. Nothing here is ever posted again,
 # and the edition each one went out with is what stops a second run of
@@ -87,3 +82,6 @@ relayed:
   - slug: electronic-invoicing-in-spain-how-it-works-and-deadlines
     queue: insights
     edition: 2026-W41
+  - slug: vies-verification-check-eu-vat-number
+    queue: insights
+    edition: 2026-W44
