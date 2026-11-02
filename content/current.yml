@@ -78,7 +78,6 @@ exclude:
   - francescobianco
 
 developers:
-  - Luca941-c
   - m4v1
   - MarcoProsperi
   - MicheleOpenApi
@@ -87,9 +86,10 @@ developers:
   - cipriani1194
   - FrancescoRicchiutiOpenapi
   - GiovanniOpenapi
+  - Luca941-c
 
 contributors:
-  - Aaqibhafeezkhan
   - kevin-lozada-santos
   - Deadpool2000
   - Seraphim200001
+  - Aaqibhafeezkhan
