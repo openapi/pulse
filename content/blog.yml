@@ -26,6 +26,11 @@
 news:
 
 insights:
+  - slug: electronic-signature-eidas-regulation-and-legal-validity-in-the-eu
+    date: 2026-10-29
+    title: Electronic Signature: eIDAS Regulation and Legal Validity in the EU
+    url: https://openapi.com/blog/electronic-signature-eidas-regulation-and-legal-validity-in-the-eu
+    excerpt: eIDAS Regulation: electronic signatures and the legal validity of Simple, Advanced and Qualified Signatures
 
 # Articles already relayed to Discussions. Nothing here is ever posted again,
 # and the edition each one went out with is what stops a second run of
