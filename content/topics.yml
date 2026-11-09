@@ -14,10 +14,6 @@
 # in the published post. A topic without a `short` falls back to its title.
 
 topics:
-  - number: 27
-    short: What makes a good MCP tool doc?
-    title: What does a genuinely good MCP tool description look like?
-    url: https://github.com/orgs/openapi/discussions/27
   - number: 28
     short: Invented field or refused call?
     title: Worse: an agent that invents a field, or one that refuses to call?
@@ -140,3 +136,7 @@ topics:
     short: NL to API call: product or demo?
     title: Is 'natural language to API call' a product, or a demo?
     url: https://github.com/orgs/openapi/discussions/26
+  - number: 27
+    short: What makes a good MCP tool doc?
+    title: What does a genuinely good MCP tool description look like?
+    url: https://github.com/orgs/openapi/discussions/27
