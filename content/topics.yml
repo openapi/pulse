@@ -140,3 +140,15 @@ topics:
     short: What makes a good MCP tool doc?
     title: What does a genuinely good MCP tool description look like?
     url: https://github.com/orgs/openapi/discussions/27
+  - number: 79
+    title: Open Source AI: one bar to clear, or a ladder to climb?
+    url: https://github.com/orgs/openapi/discussions/79
+  - number: 80
+    title: Data is the bottleneck of Open Source AI. What stops you from describing yours?
+    url: https://github.com/orgs/openapi/discussions/80
+  - number: 81
+    title: Three million models: should sharing terms be machine-readable?
+    url: https://github.com/orgs/openapi/discussions/81
+  - number: 82
+    title: MIT on the code, restrictions on the weights: is that Open Source AI?
+    url: https://github.com/orgs/openapi/discussions/82
