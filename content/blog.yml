@@ -26,11 +26,6 @@
 news:
 
 insights:
-  - slug: cadastre-what-is-it-and-what-information-does-it-provide
-    date: 2026-11-16
-    title: Cadastre: what is it and what information does it provide?
-    url: https://openapi.com/blog/cadastre-what-is-it-and-what-information-does-it-provide
-    excerpt: Real estate databases and automation: integrating Cadastre and Land Registry workflows via API
 
 # Articles already relayed to Discussions. Nothing here is ever posted again,
 # and the edition each one went out with is what stops a second run of
@@ -93,3 +88,6 @@ relayed:
   - slug: electronic-signature-eidas-regulation-and-legal-validity-in-the-eu
     queue: insights
     edition: 2026-W45
+  - slug: cadastre-what-is-it-and-what-information-does-it-provide
+    queue: insights
+    edition: 2026-W47

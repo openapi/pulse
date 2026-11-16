@@ -14,10 +14,6 @@
 # in the published post. A topic without a `short` falls back to its title.
 
 topics:
-  - number: 28
-    short: Invented field or refused call?
-    title: Worse: an agent that invents a field, or one that refuses to call?
-    url: https://github.com/orgs/openapi/discussions/28
   - number: 29
     short: Tool call broke: what do you check?
     title: What is the first thing you check when a tool call goes wrong?
@@ -152,3 +148,7 @@ topics:
   - number: 82
     title: MIT on the code, restrictions on the weights: is that Open Source AI?
     url: https://github.com/orgs/openapi/discussions/82
+  - number: 28
+    short: Invented field or refused call?
+    title: Worse: an agent that invents a field, or one that refuses to call?
+    url: https://github.com/orgs/openapi/discussions/28
