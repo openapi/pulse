@@ -152,3 +152,6 @@ topics:
     short: Invented field or refused call?
     title: Worse: an agent that invents a field, or one that refuses to call?
     url: https://github.com/orgs/openapi/discussions/28
+  - number: 85
+    title: Show and tell: describing an agent run that pauses for human approval
+    url: https://github.com/orgs/openapi/discussions/85
