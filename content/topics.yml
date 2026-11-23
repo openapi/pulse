@@ -14,10 +14,6 @@
 # in the published post. A topic without a `short` falls back to its title.
 
 topics:
-  - number: 29
-    short: Tool call broke: what do you check?
-    title: What is the first thing you check when a tool call goes wrong?
-    url: https://github.com/orgs/openapi/discussions/29
   - number: 30
     short: The smallest thing you built
     title: Show us the smallest useful thing you built on an API
@@ -155,3 +151,7 @@ topics:
   - number: 85
     title: Show and tell: describing an agent run that pauses for human approval
     url: https://github.com/orgs/openapi/discussions/85
+  - number: 29
+    short: Tool call broke: what do you check?
+    title: What is the first thing you check when a tool call goes wrong?
+    url: https://github.com/orgs/openapi/discussions/29
